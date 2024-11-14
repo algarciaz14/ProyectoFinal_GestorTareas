@@ -1,0 +1,16 @@
+:host {
+    background-color: #f0e8f9; /* Color lavanda claro */
+  }
+  
+  .card {
+    background-color: #f3f0fb; /* Fondo blanco con un toque lavanda */
+  }
+  
+  .btn {
+    background-color: #6f42c1; /* Botón morado */
+  }
+  
+  .btn:hover {
+    background-color: #5a32a3; /* Botón morado oscuro al pasar el ratón */
+  }
+  

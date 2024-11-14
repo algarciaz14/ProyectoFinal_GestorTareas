@@ -1,0 +1,16 @@
+:host {
+    background-color: #f9f1e8; /* Color amarillo suave */
+  }
+  
+  .card {
+    background-color: #fbf4d4; /* Fondo blanco con un toque amarillo */
+  }
+  
+  .btn {
+    background-color: #ffc107; /* Botón amarillo */
+  }
+  
+  .btn:hover {
+    background-color: #e0a800; /* Botón amarillo oscuro al pasar el ratón */
+  }
+  

@@ -1,0 +1,29 @@
+body {
+  background-color: #f6dbda; /* Rosa claro de fondo */
+  font-family: 'Roboto', sans-serif;
+}
+
+.card {
+  background-color: rgb(240, 234, 234); /* Fondo blanco para las tarjetas */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+.table th, .table td {
+  vertical-align: middle; /* Centrar verticalmente el contenido */
+}
+
+.table {
+  margin-top: 20px; /* Espaciado superior para la tabla */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f8f9fa; /* Color de fondo alterno para filas */
+}
+
+.btn {
+  transition: background-color 0.3s ease; /* Efecto de transición al cambiar el color */
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Color de fondo al pasar el ratón por encima */
+}

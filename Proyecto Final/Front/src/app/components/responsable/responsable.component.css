@@ -1,0 +1,16 @@
+:host {
+    background-color: #e8f0f9; /* Color azul claro */
+  }
+  
+  .card {
+    background-color: #f0f6fb; /* Fondo blanco con un toque azul */
+  }
+  
+  .btn {
+    background-color: #007bff; /* Botón azul */
+  }
+  
+  .btn:hover {
+    background-color: #0056b3; /* Botón azul oscuro al pasar el ratón */
+  }
+  

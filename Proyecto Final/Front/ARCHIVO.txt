@@ -1,0 +1,7 @@
+Ejercicio: API REST con conexión a PostgreSQL / MySQL (Personalizado)
+
+Garcia Zarraga Angelica Lizbeth
+
+De nuevo, como los archivos son muy pesados los subiré a mi gitLab en el siguiente link: https://gitlab.com/Angy_14/crud_tareas.git
+
+Y el link de mi video es: https://youtu.be/3ra11SadC8Y

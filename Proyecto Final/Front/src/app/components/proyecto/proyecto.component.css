@@ -1,0 +1,16 @@
+:host {
+    background-color: #f2e8d5; /* Color durazno claro */
+  }
+  
+  .card {
+    background-color: #fbf2e0; /* Fondo blanco con un toque durazno */
+  }
+  
+  .btn {
+    background-color: #fd7e14; /* Botón naranja */
+  }
+  
+  .btn:hover {
+    background-color: #e86c00; /* Botón naranja oscuro al pasar el ratón */
+  }
+  
