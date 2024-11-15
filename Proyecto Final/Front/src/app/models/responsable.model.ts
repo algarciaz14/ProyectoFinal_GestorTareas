@@ -7,15 +7,15 @@ export class Responsable {
     apellido!: string;
     correo!: string;
     celular!: string;
-    departamento!: Departamento;  // Ahora es de tipo Departamento
-    puesto!: Puesto;              // Ahora es de tipo Puesto
+    departamentoId!: number;  // Cambia a almacenar solo el ID
+    puestoId!: number;        // Cambia a almacenar solo el ID
 
     constructor() {
         this.nombre = '';
         this.apellido = '';
         this.correo = '';
         this.celular = '';
-        this.departamento = new Departamento(); // Instancia de Departamento
-        this.puesto = new Puesto();             // Instancia de Puesto
+        this.departamentoId = 0;
+        this.puestoId = 0;
     }
 }

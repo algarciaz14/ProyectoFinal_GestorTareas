@@ -73,4 +73,14 @@ export class ResponsablesComponent implements OnInit {
   updateResponsable(responsable: Responsable): void {
     this.nuevoResponsable = { ...responsable };
   }
+
+  getDepartamentoNombre(id: number): string {
+    const departamento = this.departamentos.find(dep => dep.id === id);
+    return departamento ? departamento.nombre : 'Sin asignar';
+  }
+
+  getPuestoNombre(id: number): string {
+    const puesto = this.puestos.find(pue => pue.id === id);
+    return puesto ? puesto.nombre : 'Sin asignar';
+  }
 }

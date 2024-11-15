@@ -1,16 +1,99 @@
-:host {
-    background-color: #f9f1e8; /* Color amarillo suave */
-  }
-  
-  .card {
-    background-color: #fbf4d4; /* Fondo blanco con un toque amarillo */
-  }
-  
-  .btn {
-    background-color: #ffc107; /* Botón amarillo */
-  }
-  
-  .btn:hover {
-    background-color: #e0a800; /* Botón amarillo oscuro al pasar el ratón */
-  }
-  
+/* Fondo de la página */
+body {
+  background-color: #e6f2ff; /* Azul claro para un fondo visible */
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilos para la tarjeta de "Crear" */
+.card.crear {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.card.crear h2 {
+  color: #4CAF50; /* Color verde para resaltar el título de la sección de creación */
+}
+
+/* Estilos para la tabla de "Registrados" */
+.card.registrados {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.card.registrados h2 {
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Tabla en la sección de registrados */
+.table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+  background-color: #4CAF50;
+  color: white;
+  text-align: left;
+  padding: 12px;
+}
+
+.table td {
+  background-color: #fff;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Botones de acción */
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}

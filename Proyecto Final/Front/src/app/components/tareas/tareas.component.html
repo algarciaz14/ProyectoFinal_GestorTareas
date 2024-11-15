@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  <div class="card p-4 shadow-sm bg-light">
+  <div class="card crear p-4 shadow-sm bg-light">
     <h2 class="text-center mb-4">{{ isEditMode ? 'Editar tarea' : 'Crear tarea' }}</h2>
     <form #tareaForm="ngForm" (ngSubmit)="agregarTarea()">
       <div class="form-row">
@@ -101,7 +101,7 @@
         <th>Proyecto</th>
         <th>Fecha de Registro</th>
         <th>Fecha de Cierre</th>
-        <th>Opciones</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>

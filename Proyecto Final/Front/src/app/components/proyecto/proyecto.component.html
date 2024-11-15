@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <div class="card p-4 shadow-sm bg-light">
+  <div class="card crear p-4 shadow-sm bg-light">
       <h2 class="text-center mb-4">Crear Proyecto</h2>
       <form #proyectoForm="ngForm" (ngSubmit)="agregarProyecto()">
         <div class="form-group">
@@ -38,13 +38,16 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción del proyecto</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let proyecto of proyectos">
             <th>{{ proyecto.id }}</th>
             <td>{{ proyecto.nombre }}</td>
+            <td>{{ proyecto.descripcion }}</td> <!-- Aquí va la descripción del proyecto -->
             <td>
+              <!-- Aquí van los botones de acción -->
               <button type="button" class="btn btn-success mr-2" (click)="updateProyecto(proyecto)">Editar</button>
               <button type="button" class="btn btn-danger" (click)="eliminarProyecto(proyecto.id)">Eliminar</button>
             </td>

@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <div class="card p-4 shadow-sm bg-light">
+  <div class="card crear p-4 shadow-sm bg-light">
       <h2 class="text-center mb-4">Crear Puesto</h2>
       <form #puestoForm="ngForm" (ngSubmit)="agregarPuesto()">
         <div class="form-group">
@@ -26,6 +26,7 @@
           <tr>
             <th>ID</th>
             <th>Nombre Puesto</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@
             <th>{{ puesto.id }}</th>
             <td>{{ puesto.nombre }}</td>
             <td>
+              
               <button type="button" class="btn btn-success mr-2" (click)="updatePuesto(puesto)">Editar</button>
               <button type="button" class="btn btn-danger" (click)="eliminarPuesto(puesto.id)">Eliminar</button>
             </td>
@@ -41,4 +43,3 @@
       </table>
     </div>
   </div>
-  
