@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TareaService } from '../../services/tarea.service';
 import { Tarea } from '../../models/tarea.model';
+import Swal from 'sweetalert2';
+import { NgForm } from '@angular/forms';
+
 
 @Component({
   selector: 'app-tareas',
@@ -12,10 +15,10 @@ export class TareasComponent implements OnInit {
   responsables: any[] = [];
   proyectos: any[] = [];
   nuevaTarea: Tarea;
-  isEditMode: boolean = false; 
+  isEditMode: boolean = false;
 
   constructor(private tareaService: TareaService) {
-    this.nuevaTarea = new Tarea(); // Inicializamos la nueva tarea
+    this.nuevaTarea = new Tarea();
   }
 
   ngOnInit(): void {
@@ -24,11 +27,9 @@ export class TareasComponent implements OnInit {
     this.obtenerProyectos();
   }
 
-  
   obtenerTareas(): void {
     this.tareaService.getTareas().subscribe(tareas => {
       this.tareas = tareas.map(tarea => {
-        // Asegurarnos de que el responsable esté completo
         if (tarea.responsable) {
           tarea.responsableNombre = `${tarea.responsable.nombre} ${tarea.responsable.apellido}`;
         }
@@ -36,7 +37,6 @@ export class TareasComponent implements OnInit {
       });
     });
   }
-  
 
   obtenerResponsables(): void {
     this.tareaService.getResponsables().subscribe(responsables => {
@@ -50,48 +50,80 @@ export class TareasComponent implements OnInit {
     });
   }
 
-
-    agregarTarea(): void {
-      console.log("Datos de la nueva tarea antes de enviar:", this.nuevaTarea);
-      
-      // Solo enviar los identificadores (responsableId y proyectoId)
-      const tareaDto = {
-        ...this.nuevaTarea,
-        proyectoId: this.nuevaTarea.proyecto?.id,
-        responsableId: this.nuevaTarea.responsable?.id  // Solo enviar el ID del responsable
-      };
-    
-      console.log("Datos que se envían al servicio:", tareaDto);
-    
-      if (this.nuevaTarea.id) {
-        // Si ya existe la tarea, actualizar
-        this.tareaService.updateTarea(tareaDto).subscribe(() => {
-          this.obtenerTareas();
-          this.nuevaTarea = new Tarea();
-        }, error => {
-          console.error('Error al actualizar la tarea:', error);
-        });
-      } else {
-        // Si no existe la tarea, crear una nueva
-        this.tareaService.createTarea(tareaDto).subscribe(() => {
-          this.obtenerTareas();
-          this.nuevaTarea = new Tarea();
-        }, error => {
-          console.error('Error al agregar la tarea:', error);
-        });
-      }
-    }
-    
-    
+  agregarTarea(tareaForm: NgForm): void {  
+    console.log("Datos de la nueva tarea antes de enviar:", this.nuevaTarea);
   
-    
-
-  eliminarTarea(id: number): void {
-    if (id) {  // Verificar  que el id no sea undefined ni 0
-      this.tareaService.deleteTarea(id).subscribe(() => {
-        this.tareas = this.tareas.filter(tarea => tarea.id !== id);
+    // Solo enviar los identificadores (responsableId y proyectoId)
+    const tareaDto = {
+      ...this.nuevaTarea,
+      proyectoId: this.nuevaTarea.proyecto?.id,
+      responsableId: this.nuevaTarea.responsable?.id
+    };
+  
+    console.log("Datos que se envían al servicio:", tareaDto);
+  
+    if (this.nuevaTarea.id) {
+      // Si ya existe la tarea, actualizar
+      this.tareaService.updateTarea(tareaDto).subscribe(() => {
+        this.obtenerTareas();
+        this.nuevaTarea = new Tarea();
+        tareaForm.reset();  
+  
+        // Notificación de éxito para actualizar
+        Swal.fire({
+          title: 'Tarea actualizada',
+          text: 'La tarea se ha actualizado correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
       }, error => {
-        console.error('Error al eliminar la tarea:', error);
+        console.error('Error al actualizar la tarea:', error);
+      });
+    } else {
+      // Si no existe la tarea, crear una nueva
+      this.tareaService.createTarea(tareaDto).subscribe(() => {
+        this.obtenerTareas();
+        this.nuevaTarea = new Tarea();
+        tareaForm.reset();  
+  
+        // Notificación de éxito para agregar
+        Swal.fire({
+          title: 'Tarea creada',
+          text: 'La tarea se ha creado correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+      }, error => {
+        console.error('Error al agregar la tarea:', error);
+      });
+    }
+  }
+  
+  eliminarTarea(id: number): void {
+    if (id !== undefined && id !== null) {  // Verificar que el ID sea válido
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Confirma si deseas eliminar esta tarea.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarla',
+        cancelButtonText: 'No, cancelar',
+        buttonsStyling: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.tareaService.deleteTarea(id).subscribe(() => {
+            this.tareas = this.tareas.filter(tarea => tarea.id !== id);
+            Swal.fire(
+              'Tarea eliminada',
+              'La tarea ha sido eliminada correctamente',
+              'success'
+            );
+          }, error => {
+            console.error('Error al eliminar la tarea:', error);
+          });
+        }
       });
     } else {
       console.error('ID de tarea inválido');
@@ -99,6 +131,7 @@ export class TareasComponent implements OnInit {
   }
 
   updateTarea(tarea: Tarea): void {
-    this.nuevaTarea = { ...tarea };
-  }
+    this.nuevaTarea = { ...tarea };
+  }
 }
+

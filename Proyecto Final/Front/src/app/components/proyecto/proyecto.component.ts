@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ProyectoService } from '../../services/proyecto.service';
 import { Proyecto } from '../../models/proyecto.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-proyectos',
@@ -15,45 +17,110 @@ export class ProyectosComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerProyectos();
-    console.log(this.proyectos);
   }
 
+  // Obtener todos los proyectos
   obtenerProyectos(): void {
-    this.proyectoService.getProyectos().subscribe(proyectos => {
-      this.proyectos = proyectos;
-    });
+    this.proyectoService.getProyectos().subscribe(
+      (proyectos) => {
+        this.proyectos = proyectos;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron obtener los proyectos.',
+        });
+      }
+    );
   }
 
-  agregarProyecto(): void {
+  // Crear o actualizar un proyecto
+  agregarProyecto(form: NgForm): void {
     if (this.nuevoProyecto.id) {
-      this.proyectoService.updateProyecto(this.nuevoProyecto).subscribe(() => {
-        this.obtenerProyectos();
-        this.nuevoProyecto = new Proyecto();
-      }, error => {
-        console.error('Error al actualizar el proyecto:', error);
-      });
+      // Actualizar proyecto
+      this.proyectoService.updateProyecto(this.nuevoProyecto).subscribe(
+        () => {
+          this.obtenerProyectos();
+          this.resetearFormulario(form);
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Proyecto actualizado correctamente.',
+          });
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo actualizar el proyecto.',
+          });
+        }
+      );
     } else {
-      console.log(this.nuevoProyecto)
-      this.proyectoService.createProyecto(this.nuevoProyecto).subscribe(() => {
-        this.obtenerProyectos();
-        this.nuevoProyecto = new Proyecto();
-      }, error => {
-        console.error('Error al agregar el proyecto:', error);
-      });
+      // Crear nuevo proyecto
+      this.proyectoService.createProyecto(this.nuevoProyecto).subscribe(
+        () => {
+          this.obtenerProyectos();
+          this.resetearFormulario(form);
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Proyecto creado correctamente.',
+          });
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo crear el proyecto.',
+          });
+        }
+      );
     }
   }
 
+  // Eliminar un proyecto
   eliminarProyecto(id: number | undefined): void {
     if (id !== undefined) {
-      this.proyectoService.deleteProyecto(id).subscribe(() => {
-        this.proyectos = this.proyectos.filter(proyecto => proyecto.id !== id);
-      }, error => {
-        console.error('Error al eliminar el proyecto:', error);
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Este proyecto se eliminará permanentemente.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.proyectoService.deleteProyecto(id).subscribe(
+            () => {
+              this.proyectos = this.proyectos.filter(
+                (proyecto) => proyecto.id !== id
+              );
+              Swal.fire('¡Eliminado!', 'El proyecto ha sido eliminado.', 'success');
+            },
+            (error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo eliminar el proyecto.',
+              });
+            }
+          );
+        }
       });
     }
   }
 
+  // Rellenar formulario para editar un proyecto
   updateProyecto(proyecto: Proyecto): void {
     this.nuevoProyecto = { ...proyecto };
+  }
+
+  // Resetear el formulario
+  private resetearFormulario(form: NgForm): void {
+    this.nuevoProyecto = new Proyecto();
+    form.resetForm();
   }
 }

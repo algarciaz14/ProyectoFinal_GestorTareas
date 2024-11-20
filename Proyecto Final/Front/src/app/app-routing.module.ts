@@ -5,7 +5,7 @@ import { ResponsablesComponent } from './components/responsable/responsable.comp
 import { ProyectosComponent } from './components/proyecto/proyecto.component';
 import { DepartamentosComponent } from './components/departamento/departamento.component';
 import { PuestosComponent } from './components/puesto/puesto.component';
-import { InicioComponent } from './components/inicio/inicio.component'; // Importa el componente de inicio
+import { InicioComponent } from './components/inicio/inicio.component'; 
 
 const routes: Routes = [
   { path: '', component: InicioComponent }, // Ruta raíz que muestra el componente Inicio

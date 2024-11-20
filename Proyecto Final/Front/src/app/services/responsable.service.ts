@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Responsable } from '../models/responsable.model';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Departamento } from '../models/departamento.model';
+import { Puesto } from '../models/puesto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +47,13 @@ export class ResponsableService {
   private handleError(error: any): Observable<never> {
     console.error('Error en la solicitud', error);
     return throwError('Ocurrió un error en la solicitud. Por favor, inténtalo de nuevo.');
+  }
+
+  getPuestos(): Observable<Puesto[]> {
+    return this.http.get<any[]>('http://localhost:8080/api/puestos');
+  }
+
+  getDepartamentos(): Observable<Departamento[]> {
+    return this.http.get<any[]>('http://localhost:8080/api/departamentos');
   }
 }

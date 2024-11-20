@@ -1,7 +1,9 @@
 <div class="container mt-5">
   <div class="card crear p-4 shadow-sm bg-light">
     <h2 class="text-center mb-4">{{ isEditMode ? 'Editar tarea' : 'Crear tarea' }}</h2>
-    <form #tareaForm="ngForm" (ngSubmit)="agregarTarea()">
+    <form #tareaForm="ngForm" (ngSubmit)="agregarTarea(tareaForm)">
+
+      
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="nombre">Nombre</label>
@@ -13,7 +15,14 @@
             class="form-control"
             placeholder="Nombre de la tarea"
             required
+            minlength="4"
+            maxlength="30"
+            #nombre="ngModel"
+            [ngClass]="{'is-invalid': nombre.invalid && nombre.touched}"
           />
+          <div *ngIf="nombre.invalid && nombre.touched" class="invalid-feedback">
+            El nombre debe tener entre 4 y 15 caracteres.
+          </div>
         </div>
         <div class="form-group col-md-6">
           <label for="prioridad">Prioridad</label>
@@ -109,16 +118,17 @@
         <td>{{ tarea.id }}</td>
         <td>{{ tarea.nombre }}</td>
         <td>{{ tarea.prioridad }}</td>
-        <td>{{ tarea.responsable ? (tarea.responsable.nombre + ' ' + tarea.responsable.apellido) : 'No asignado' }}</td>
+        <td>{{ tarea.responsableNombre }}</td>
         <td>{{ tarea.estado }}</td>
         <td>{{ tarea.proyecto?.nombre }}</td>
-        <td>{{ tarea.createAt | date:'short' }}</td>
-        <td>{{ tarea.createAtc ? (tarea.createAtc | date:'short') : 'No cerrado' }}</td>
+        <td>{{ tarea.createAt | date }}</td>
+        <td>{{ tarea.createAtc | date }}</td>
         <td>
-          <button (click)="updateTarea(tarea)" class="btn btn-success btn-sm">Editar</button>
-          <button (click)="eliminarTarea(tarea.id!)" class="btn btn-danger btn-sm">Eliminar</button>
+          <button class="btn btn-success btn-sm" (click)="updateTarea(tarea)">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="tarea.id ? eliminarTarea(tarea.id) : null">Eliminar</button>
         </td>
       </tr>
     </tbody>
-  </table>
+  </table>
 </div>
+

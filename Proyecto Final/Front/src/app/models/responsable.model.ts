@@ -1,21 +1,21 @@
-import { Departamento } from './departamento.model';
-import { Puesto } from './puesto.model';
-
 export class Responsable {
     id?: number;
-    nombre!: string;
-    apellido!: string;
-    correo!: string;
-    celular!: string;
-    departamentoId!: number;  // Cambia a almacenar solo el ID
-    puestoId!: number;        // Cambia a almacenar solo el ID
-
+    nombre: string;
+    apellido: string;
+    correo: string;
+    celular: string;
+    departamento: { id: number; nombre: string } | null; 
+    puesto: { id: number; nombre: string } | null;       
+    departamentoNombre?: string;                         
+    puestoNombre?: string;                               
+  
     constructor() {
-        this.nombre = '';
-        this.apellido = '';
-        this.correo = '';
-        this.celular = '';
-        this.departamentoId = 0;
-        this.puestoId = 0;
+      this.nombre = '';
+      this.apellido = '';
+      this.correo = '';
+      this.celular = '';
+      this.departamento = null; 
+      this.puesto = null;       
     }
-}
+  }
+  

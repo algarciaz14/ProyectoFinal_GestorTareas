@@ -97,3 +97,12 @@ body {
 .btn-danger:hover {
   background-color: #c82333;
 }
+
+/* Estilos para mostrar errores de validación */
+.is-invalid {
+  border: 1px solid #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+}

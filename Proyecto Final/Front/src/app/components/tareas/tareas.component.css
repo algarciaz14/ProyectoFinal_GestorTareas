@@ -97,3 +97,11 @@ body {
 .btn-danger:hover {
   background-color: #c82333;
 }
+
+.is-invalid {
+  border-color: red !important;
+}
+
+.invalid-feedback {
+  color: red;
+}
