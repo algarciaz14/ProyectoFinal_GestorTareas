@@ -63,14 +63,16 @@ public class TareaRestController {
     }
 
 
-    // Obtener todas las tareas
+   
+  //Leer todas las tareas
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Tarea> consulta() {
-        return tareaService.findAll();
+        return tareaService.findAllWithResponsable();  
     }
 
-    // Obtener una tarea por ID
+
+    // Obtener una tarea por ID especifico
     @GetMapping("/{id}")
     public ResponseEntity<?> consultaPorID(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
@@ -88,7 +90,7 @@ public class TareaRestController {
         }
     }
 
-    // Eliminar una tarea por ID
+    // Eliminar una tarea por ID especifico
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();

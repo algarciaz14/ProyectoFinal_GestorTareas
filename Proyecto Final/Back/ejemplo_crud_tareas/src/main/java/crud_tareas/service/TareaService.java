@@ -10,12 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import crud_tareas.dto.TareaDto;
 import crud_tareas.entity.Tarea;
-import crud_tareas.entity.Responsable; // Asegúrate de importar Responsable
-import crud_tareas.entity.Proyecto; // Asegúrate de importar Proyecto
+import crud_tareas.entity.Responsable; 
+import crud_tareas.entity.Proyecto; 
 import crud_tareas.repository.ITareaRepository;
-
-
-//import jakarta.transaction.Transactional;
 
 
 
@@ -30,6 +27,13 @@ public class TareaService {
 
 	@Autowired
 	private ProyectoService proyectoService; 
+	
+
+
+	public List<Tarea> findAllWithResponsable() {
+	    return tareaRepository.findAllWithResponsable();
+	}
+
 	
 	//Consulta de todas las tareas
 	@Transactional(readOnly = true)
@@ -91,6 +95,7 @@ public class TareaService {
 	}
 	
 	
+	//Actualizar tarea
 	@Transactional
 	public Tarea updateTarea(Tarea tarea) {
 	    // Guardar la tarea actualizada en la base de datos

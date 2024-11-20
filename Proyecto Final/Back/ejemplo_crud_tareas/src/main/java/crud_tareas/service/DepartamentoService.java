@@ -47,7 +47,7 @@ public class DepartamentoService {
 		departamentoRepository.deleteById(id);
 	}
 	
-	
+	//Actualizar departamento
 	@Transactional
 	public Departamento updateDepartamento(Departamento departamento) {
 	    // Guardar el departamento actualizado en la base de datos

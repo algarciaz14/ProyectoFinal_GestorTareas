@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import crud_tareas.dto.ResponsableDto;
 import crud_tareas.entity.Responsable;
-import crud_tareas.entity.Puesto;
 import crud_tareas.entity.Departamento;
+import crud_tareas.entity.Puesto;
 import crud_tareas.service.ResponsableService;
-import crud_tareas.service.PuestoService;
-import crud_tareas.service.DepartamentoService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -26,44 +24,51 @@ public class ResponsableRestController {
     @Autowired
     private ResponsableService responsableService;
 
-    @Autowired
-    private PuestoService puestoService;
-
-    @Autowired
-    private DepartamentoService departamentoService;
-
+    //Crear un responsable
     @PostMapping("/create")
     public ResponseEntity<?> createResponsable(@RequestBody ResponsableDto responsableDto) {
         Map<String, Object> response = new HashMap<>();
-        Responsable nuevoResponsable;
-
         try {
-            nuevoResponsable = responsableService.createResponsable(responsableDto);
-            response.put("mensaje", "Responsable creado con éxito, con el ID " + nuevoResponsable.getId());
+            // Validaciones de campos obligatorios
+            if (responsableDto.getNombre() == null || responsableDto.getNombre().isEmpty()) {
+                response.put("mensaje", "El nombre del responsable es obligatorio");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            if (responsableDto.getApellido() == null || responsableDto.getApellido().isEmpty()) {
+                response.put("mensaje", "El apellido del responsable es obligatorio");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            // Crear responsable
+            Responsable nuevoResponsable = responsableService.createResponsable(responsableDto);
+            response.put("mensaje", "Responsable creado con éxito");
             response.put("responsable", nuevoResponsable);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al realizar el insert en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            response.put("mensaje", "Error inesperado al crear el responsable");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // Leer todos los responsables
+  //Leer todos los responsables
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public List<Responsable> consulta() {
         return responsableService.findAll();
     }
-
-    // Obtener un responsable con ID específico
+    
+    
+    //Obtener un responsable con id especifico 
     @GetMapping("/{id}")
     public ResponseEntity<?> consultaPorID(@PathVariable Long id) {
-        Responsable responsable;
         Map<String, Object> response = new HashMap<>();
-
         try {
-            responsable = responsableService.findById(id);
+            Responsable responsable = responsableService.findById(id);
             if (responsable == null) {
                 response.put("mensaje", "El responsable con el ID: " + id + " no existe en la base de datos.");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -76,11 +81,10 @@ public class ResponsableRestController {
         }
     }
 
-    // Eliminar al responsable del ID especificado
+  //Eliminar el responsable del id especificado
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
-
         try {
             Responsable responsableDelete = responsableService.findById(id);
             if (responsableDelete == null) {
@@ -97,11 +101,10 @@ public class ResponsableRestController {
         }
     }
 
-    // Actualizar Responsable
+    //Actualizar responsable
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody ResponsableDto responsableDto, @PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
-
         try {
             Responsable responsableActual = responsableService.findById(id);
             if (responsableActual == null) {
@@ -123,33 +126,31 @@ public class ResponsableRestController {
                 responsableActual.setCelular(responsableDto.getCelular());
             }
 
-            // Asignamos Departamento y Puesto si existen
+            // Validar y asignar departamento
             if (responsableDto.getDepartamento() != null) {
-                Departamento departamento = departamentoService.findById(responsableDto.getDepartamento());
-                if (departamento != null) {
-                    responsableActual.setDepartamento(departamento);
-                } else {
-                    response.put("mensaje", "Error: el departamento con ID " + responsableDto.getDepartamento() + " no existe.");
+                Departamento departamento = responsableService.findDepartamentoById(responsableDto.getDepartamento().getId());
+                if (departamento == null) {
+                    response.put("mensaje", "El departamento con ID " + responsableDto.getDepartamento().getId() + " no existe.");
                     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
                 }
+                responsableActual.setDepartamento(departamento);
             }
 
+            // Validar y asignar puesto
             if (responsableDto.getPuesto() != null) {
-                Puesto puesto = puestoService.findById(responsableDto.getPuesto());
-                if (puesto != null) {
-                    responsableActual.setPuesto(puesto);
-                } else {
-                    response.put("mensaje", "Error: el puesto con ID " + responsableDto.getPuesto() + " no existe.");
+                Puesto puesto = responsableService.findPuestoById(responsableDto.getPuesto().getId());
+                if (puesto == null) {
+                    response.put("mensaje", "El puesto con ID " + responsableDto.getPuesto().getId() + " no existe.");
                     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
                 }
+                responsableActual.setPuesto(puesto);
             }
 
-            // Guardamos el responsable actualizado
+            // Guardar cambios
             Responsable responsableUpdated = responsableService.updateResponsable(responsableActual);
             response.put("mensaje", "El responsable ha sido actualizado con éxito");
             response.put("responsable", responsableUpdated);
             return new ResponseEntity<>(response, HttpStatus.OK);
-
         } catch (DataAccessException e) {
             response.put("mensaje", "Error al actualizar el responsable en la base de datos");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -157,3 +158,4 @@ public class ResponsableRestController {
         }
     }
 }
+

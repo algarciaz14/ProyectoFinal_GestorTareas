@@ -2,14 +2,14 @@ package crud_tareas.dto;
 
 import java.io.Serializable;
 
-//import jakarta.persistence.Column;
-
 public class DepartamentoDto implements Serializable {
 	/**
 	 * *
 	 */
 	
 	private static final long serialVersionUID = 1L;
+	
+	private Long id;
 	
 	private String nombre;
 
@@ -19,6 +19,14 @@ public class DepartamentoDto implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

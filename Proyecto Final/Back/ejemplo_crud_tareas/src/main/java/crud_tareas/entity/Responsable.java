@@ -2,12 +2,8 @@ package crud_tareas.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-//import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,12 +36,15 @@ public class Responsable {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "puesto_id")
-    @JsonIgnore // Ignorar el "puesto" para evitar ciclos
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //@JsonIgnore // Ignorar el "puesto" para evitar ciclos
     private Puesto puesto; // Relación con Puesto
 
+
     @OneToMany(mappedBy = "responsable")
+    @JsonBackReference  // Se mantine @JsonBackReference aquí para evitar ciclos de referencia
     private List<Tarea> tareas; // Relación con Tarea
-    
+
    
 
 	public Long getId() {

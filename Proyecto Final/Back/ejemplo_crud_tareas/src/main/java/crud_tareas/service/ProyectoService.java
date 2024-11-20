@@ -48,6 +48,7 @@ public class ProyectoService {
 	}
 	
 	
+	//Actualizar proyecto
 	@Transactional
 	public Proyecto updateProyecto(Proyecto proyecto) {
 	    // Guardar el proyecto actualizado en la base de datos

@@ -2,7 +2,6 @@ package crud_tareas.dto;
 
 import java.io.Serializable;
 
-//import jakarta.persistence.Column;
 
 public class ProyectoDto implements Serializable {
 	/**

@@ -1,8 +1,6 @@
 package crud_tareas.service;
 
-//import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import crud_tareas.dto.PuestoDto;
 import crud_tareas.entity.Puesto;
 import crud_tareas.repository.IPuestoRepository;
-//import jakarta.transaction.Transactional;
+
 
 @Service
 public class PuestoService {
@@ -49,7 +47,7 @@ public class PuestoService {
 		puestoRepository.deleteById(id);
 	}
 	
-	
+	//Actualizar puesto
 	@Transactional
 	public Puesto updatePuesto(Puesto puesto) {
 	    // Guardar el puesto actualizado en la base de datos

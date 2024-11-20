@@ -34,7 +34,7 @@ public class PuestoRestController {
 	@Autowired
 	private PuestoService puestoService;
 	
-	
+	//Crear un puesto
 	@PostMapping("/create")
 	    public ResponseEntity<?> createPuesto(@RequestBody PuestoDto puestoDto) {
 	        Puesto puestoNuevo;
@@ -129,7 +129,7 @@ public class PuestoRestController {
 	     
 
 	        // Guardamos el puesto actualizado en la base de datos
-	        Puesto puestoUpdated = puestoService.updatePuesto(puestoActual); // Se llama al método que guarda el puesto actualizado
+	        Puesto puestoUpdated = puestoService.updatePuesto(puestoActual);
 
 	        response.put("mensaje", "El puesto ha sido actualizado con éxito");
 	        response.put("puesto", puestoUpdated); // Regresamos el puesto actualizado

@@ -1,7 +1,7 @@
 package crud_tareas.dto;
 
 import java.io.Serializable;
-//import jakarta.persistence.Column;
+
 
 public class ResponsableDto implements Serializable {
 	/**
@@ -14,21 +14,8 @@ public class ResponsableDto implements Serializable {
 	private String apellido;
 	private String correo;
 	private Long celular;
-	private Long departamento;
-	private Long puesto;
-	
-	public Long getDepartamento() {
-		return departamento;
-	}
-	public void setDepartamento(Long departamento) {
-		this.departamento = departamento;
-	}
-	public Long getPuesto() {
-		return puesto;
-	}
-	public void setPuesto(Long puesto) {
-		this.puesto = puesto;
-	}
+	private DepartamentoDto departamento;
+	private PuestoDto puesto;
 	public String getNombre() {
 		return nombre;
 	}
@@ -53,4 +40,19 @@ public class ResponsableDto implements Serializable {
 	public void setCelular(Long celular) {
 		this.celular = celular;
 	}
+	public DepartamentoDto getDepartamento() {
+		return departamento;
+	}
+	public void setDepartamento(DepartamentoDto departamento) {
+		this.departamento = departamento;
+	}
+	public PuestoDto getPuesto() {
+		return puesto;
+	}
+	public void setPuesto(PuestoDto puesto) {
+		this.puesto = puesto;
+	}
+	
+	
+	
 }

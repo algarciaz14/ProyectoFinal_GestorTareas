@@ -2,25 +2,19 @@ package crud_tareas.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-//import java.util.Date;
-
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-//import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table (name = "puestos")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Puesto {
 	
 	@Id
@@ -31,6 +25,7 @@ public class Puesto {
 	// Relación One-to-Many con Responsable
     @OneToMany(mappedBy = "puesto")
     @JsonIgnoreProperties({"puesto"}) // Ignorar la propiedad "puesto" de Responsable para evitar el ciclo
+    @JsonIgnore 
     private List<Responsable> responsables;
     
    

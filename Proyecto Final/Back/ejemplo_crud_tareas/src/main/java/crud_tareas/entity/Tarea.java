@@ -1,10 +1,8 @@
 package crud_tareas.entity;
 
 import java.time.LocalDateTime;
-//import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,13 +29,15 @@ public class Tarea {
 	@Column (name="fechaCierre")
 	private LocalDateTime createAtc;
 	
-	
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "responsable_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Responsable responsable; // Relación con Responsable
+	@JoinColumn(name = "responsable_id")
+	@JsonManagedReference  // Se cambió a @JsonManagedReference para que Tarea incluya los datos del responsable
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	private Responsable responsable; // Relación con Responsable
 
+	
+	
+	
     public Responsable getResponsable() {
 		return responsable;
 	}

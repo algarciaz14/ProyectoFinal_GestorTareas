@@ -48,12 +48,12 @@ public class ResponsableService {
 
         // Obtener el departamento y el puesto a partir de sus IDs
         if (responsableDto.getDepartamento() != null) {
-            Departamento departamento = departamentoService.findById(responsableDto.getDepartamento());
+            Departamento departamento = departamentoService.findById(responsableDto.getDepartamento().getId());
             responsableEntity.setDepartamento(departamento); 
         }
 
         if (responsableDto.getPuesto() != null) {
-            Puesto puesto = puestoService.findById(responsableDto.getPuesto());
+            Puesto puesto = puestoService.findById(responsableDto.getPuesto().getId());
             responsableEntity.setPuesto(puesto); 
         }
 
@@ -68,9 +68,18 @@ public class ResponsableService {
 	}
 	
 	
+	//Actualizar responsable
 	@Transactional
 	public Responsable updateResponsable(Responsable responsable) {
 	    // Guardar el responsable en la base de datos
 	    return responsableRepository.save(responsable); //
 	}
+	
+	 public Departamento findDepartamentoById(Long id) {
+	        return departamentoService.findById(id);
+	    }
+
+	    public Puesto findPuestoById(Long id) {
+	        return puestoService.findById(id);
+	    }
 }
