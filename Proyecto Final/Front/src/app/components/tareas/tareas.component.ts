@@ -131,7 +131,19 @@ export class TareasComponent implements OnInit {
   }
 
   updateTarea(tarea: Tarea): void {
-    this.nuevaTarea = { ...tarea };
+    this.isEditMode = true;
+  
+    // Buscar los objetos exactos en las listas
+    const responsable = this.responsables.find(r => r.id === tarea.responsable?.id);
+    const proyecto = this.proyectos.find(p => p.id === tarea.proyecto?.id);
+  
+    // Asignar la tarea seleccionada al modelo
+    this.nuevaTarea = {
+      ...tarea,
+      responsable,
+      proyecto,
+    };
   }
+  
 }
 

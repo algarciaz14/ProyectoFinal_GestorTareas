@@ -104,7 +104,7 @@ export class DepartamentosComponent implements OnInit {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo eliminar el departamento.',
+                text: 'Error al eliminar el departamento, ya tiene una tarea asignada.',
               });
             }
           );

@@ -6,7 +6,6 @@ import { PuestoService } from '../../services/puesto.service';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 
-
 @Component({
   selector: 'app-responsables',
   templateUrl: './responsable.component.html',
@@ -14,10 +13,10 @@ import { NgForm } from '@angular/forms';
 })
 export class ResponsablesComponent implements OnInit {
   responsables: Responsable[] = [];
-  nuevoResponsable: Responsable = new Responsable(); 
+  nuevoResponsable: Responsable = new Responsable();
   departamentos: { id: number; nombre: string }[] = [];
   puestos: { id: number; nombre: string }[] = [];
-  isEditMode: boolean = false; 
+  isEditMode: boolean = false;
 
   constructor(
     private responsableService: ResponsableService,
@@ -34,14 +33,14 @@ export class ResponsablesComponent implements OnInit {
   cargarDepartamentosYPuestos(): void {
     this.departamentosService.getDepartamentos().subscribe(departamentos => {
       this.departamentos = departamentos.map(d => ({
-        id: d.id || 0, // Asegurar que `id` nunca sea undefined
+        id: d.id || 0,
         nombre: d.nombre
       }));
     });
-  
+
     this.puestosService.getPuestos().subscribe(puestos => {
       this.puestos = puestos.map(p => ({
-        id: p.id || 0, // Asegurar que `id` nunca sea undefined
+        id: p.id || 0,
         nombre: p.nombre
       }));
     });
@@ -71,9 +70,8 @@ export class ResponsablesComponent implements OnInit {
       });
       return;
     }
-  
+
     if (this.nuevoResponsable.id) {
-      // Actualizar responsable
       this.responsableService.updateResponsable(this.nuevoResponsable).subscribe(
         () => {
           Swal.fire({
@@ -82,8 +80,7 @@ export class ResponsablesComponent implements OnInit {
             text: 'Responsable actualizado con éxito.',
           });
           this.obtenerResponsables();
-          this.nuevoResponsable = new Responsable();
-          responsableForm.resetForm(); // Resetea el formulario
+          this.resetFormulario(responsableForm);
         },
         (error) => {
           Swal.fire({
@@ -95,7 +92,6 @@ export class ResponsablesComponent implements OnInit {
         }
       );
     } else {
-      // Crear nuevo responsable
       this.responsableService.createResponsable(this.nuevoResponsable).subscribe(
         () => {
           Swal.fire({
@@ -104,8 +100,7 @@ export class ResponsablesComponent implements OnInit {
             text: 'Responsable creado con éxito.',
           });
           this.obtenerResponsables();
-          this.nuevoResponsable = new Responsable();
-          responsableForm.resetForm(); // Resetea el formulario
+          this.resetFormulario(responsableForm);
         },
         (error) => {
           Swal.fire({
@@ -118,7 +113,6 @@ export class ResponsablesComponent implements OnInit {
       );
     }
   }
-  
 
   // Eliminar un responsable
   eliminarResponsable(id: number | undefined): void {
@@ -166,8 +160,18 @@ export class ResponsablesComponent implements OnInit {
 
   // Rellenar el formulario para editar un responsable
   updateResponsable(responsable: Responsable): void {
-    this.isEditMode = true; // Cambiar a modo edición
-    this.nuevoResponsable = { ...responsable };
+    this.isEditMode = true;
+    const departamento = this.departamentos.find(d => d.id === responsable.departamento?.id) || null;
+    const puesto = this.puestos.find(p => p.id === responsable.puesto?.id) || null;
+
+    this.nuevoResponsable = { ...responsable, departamento, puesto };
+  }
+
+  // Resetear el formulario
+  resetFormulario(responsableForm: NgForm): void {
+    this.nuevoResponsable = new Responsable();
+    responsableForm.resetForm();
+    this.isEditMode = false;
   }
 
   // Obtener nombre del puesto
@@ -175,7 +179,6 @@ export class ResponsablesComponent implements OnInit {
     if (!id) {
       return 'Sin asignar';
     }
-    
     const puesto = this.puestos.find(p => p.id === id);
     return puesto ? puesto.nombre : 'Sin asignar';
   }
@@ -185,7 +188,6 @@ export class ResponsablesComponent implements OnInit {
     if (!id) {
       return 'Sin asignar';
     }
-    
     const departamento = this.departamentos.find(d => d.id === id);
     return departamento ? departamento.nombre : 'Sin asignar';
   }

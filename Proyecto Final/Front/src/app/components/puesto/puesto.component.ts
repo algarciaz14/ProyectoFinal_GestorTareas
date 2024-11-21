@@ -105,7 +105,7 @@ export class PuestosComponent implements OnInit {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo eliminar el puesto',
+                text: 'Error al eliminar el puesto, ya tiene un responsable asignado',
               });
             }
           );

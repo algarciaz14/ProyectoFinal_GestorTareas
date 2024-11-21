@@ -1,39 +1,44 @@
 /* Fondo de la página */
 body {
-  background-color: #106dd0; /* Azul claro para un fondo visible */
+  background-color: #d8d5d5; /* Gris claro para el fondo */
   font-family: Arial, sans-serif;
   color: #333;
   margin: 0;
   padding: 0;
+  min-height: 100vh; /* Asegura que el fondo cubra toda la altura de la página */
+}
+
+/* Eliminar márgenes y paddings en el body y navbar */
+body, .navbar {
+  margin: 0;
+  padding: 0;
+}
+
+/* Eliminar espacio extra antes del contenido */
+.container {
+  margin-top: 0; /* Elimina el margen superior extra */
+  padding-top: 0; /* Elimina padding superior extra */
+  background-color: transparent; /* Fondo transparente para el contenedor */
 }
 
 /* Estilos para la tarjeta de "Crear" */
 .card.crear {
-  background-color: #ffffff;
+  background-color: #ede5e5;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 0; /* Eliminar margen inferior extra */
 }
 
-.card.crear h2 {
-  color: #4CAF50; /* Color verde para resaltar el título de la sección de creación */
-}
-
-/* Estilos para la tabla de "Registrados" */
+/* Estilos para la tarjeta de "Registrados" */
 .card.registrados {
-  background-color: #ffffff;
+  background-color: #ede5e5;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-}
-
-.card.registrados h2 {
-  color: #333;
-  font-weight: bold;
-  text-align: center;
+  margin-top: 30px; /* Espacio entre las tarjetas */
 }
 
 /* Tabla en la sección de registrados */
