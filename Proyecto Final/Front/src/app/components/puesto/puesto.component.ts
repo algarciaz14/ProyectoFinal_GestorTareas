@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 export class PuestosComponent implements OnInit {
   puestos: Puesto[] = [];
   nuevoPuesto: Puesto = new Puesto();
+  // Propiedades de filtro
+  searchText: string = '';
 
   constructor(private puestoService: PuestoService) {}
 

@@ -1,12 +1,11 @@
 /* Fondo de la página */
 body {
-  background-color: #e6f2ff; /* Gris claro para un fondo visible */
+  background-color: #d8d5d5; /* Gris claro para un fondo visible */
   font-family: Arial, sans-serif;
   color: #333;
   margin: 0;
   padding: 0;
 }
-
 /* Estilos para la tarjeta de "Crear" */
 .card.crear {
   background-color: #ffffff;
@@ -65,7 +64,7 @@ body {
 
 .table tbody tr:hover {
   background-color: #f1f1f1;
-}
+} 
 
 /* Botones de acción */
 .btn-success {

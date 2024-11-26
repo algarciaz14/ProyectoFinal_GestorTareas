@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TareaService } from '../../services/tarea.service';
 import { Tarea } from '../../models/tarea.model';
+import { Responsable } from '../../models/responsable.model';
+import { Proyecto } from '../../models/proyecto.model';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
-
 
 @Component({
   selector: 'app-tareas',
@@ -12,10 +13,17 @@ import { NgForm } from '@angular/forms';
 })
 export class TareasComponent implements OnInit {
   tareas: Tarea[] = [];
-  responsables: any[] = [];
-  proyectos: any[] = [];
+  responsables: Responsable[] = [];
+  proyectos: Proyecto[] = [];
   nuevaTarea: Tarea;
   isEditMode: boolean = false;
+
+  // Filtros
+  searchText: string = '';
+  prioridad: string = '';
+  responsable: string = '';
+  estado: string = '';
+  proyecto: string = '';
 
   constructor(private tareaService: TareaService) {
     this.nuevaTarea = new Tarea();
@@ -50,7 +58,7 @@ export class TareasComponent implements OnInit {
     });
   }
 
-  agregarTarea(tareaForm: NgForm): void {  
+  agregarTarea(tareaForm: NgForm): void {
     console.log("Datos de la nueva tarea antes de enviar:", this.nuevaTarea);
   
     // Solo enviar los identificadores (responsableId y proyectoId)
@@ -68,8 +76,6 @@ export class TareasComponent implements OnInit {
         this.obtenerTareas();
         this.nuevaTarea = new Tarea();
         tareaForm.reset();  
-  
-        // Notificación de éxito para actualizar
         Swal.fire({
           title: 'Tarea actualizada',
           text: 'La tarea se ha actualizado correctamente.',
@@ -85,8 +91,6 @@ export class TareasComponent implements OnInit {
         this.obtenerTareas();
         this.nuevaTarea = new Tarea();
         tareaForm.reset();  
-  
-        // Notificación de éxito para agregar
         Swal.fire({
           title: 'Tarea creada',
           text: 'La tarea se ha creado correctamente.',
@@ -98,9 +102,9 @@ export class TareasComponent implements OnInit {
       });
     }
   }
-  
+
   eliminarTarea(id: number): void {
-    if (id !== undefined && id !== null) {  // Verificar que el ID sea válido
+    if (id !== undefined && id !== null) {
       Swal.fire({
         title: '¿Estás seguro?',
         text: "Confirma si deseas eliminar esta tarea.",
@@ -115,35 +119,28 @@ export class TareasComponent implements OnInit {
         if (result.isConfirmed) {
           this.tareaService.deleteTarea(id).subscribe(() => {
             this.tareas = this.tareas.filter(tarea => tarea.id !== id);
-            Swal.fire(
-              'Tarea eliminada',
-              'La tarea ha sido eliminada correctamente',
-              'success'
-            );
+            Swal.fire('Tarea eliminada', 'La tarea ha sido eliminada correctamente', 'success');
           }, error => {
             console.error('Error al eliminar la tarea:', error);
           });
         }
       });
-    } else {
-      console.error('ID de tarea inválido');
     }
   }
 
   updateTarea(tarea: Tarea): void {
     this.isEditMode = true;
   
-    // Buscar los objetos exactos en las listas
     const responsable = this.responsables.find(r => r.id === tarea.responsable?.id);
     const proyecto = this.proyectos.find(p => p.id === tarea.proyecto?.id);
   
-    // Asignar la tarea seleccionada al modelo
+    console.log('Responsable asignado:', responsable);
+    console.log('Proyecto asignado:', proyecto);
+  
     this.nuevaTarea = {
       ...tarea,
-      responsable,
-      proyecto,
+      responsable: responsable || null,
+      proyecto: proyecto || null,
     };
   }
-  
 }
-

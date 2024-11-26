@@ -1,9 +1,10 @@
-<body>
+
   <!-- Sección "Crear Departamento" -->
   <div class="container mt-5">
     <div class="card crear p-4 shadow-sm bg-light">
       <h2 class="text-center mb-4">Crear Departamento</h2>
       <form #departamentoForm="ngForm" (ngSubmit)="agregarDepartamento(departamentoForm)">
+        
         <div class="form-group">
           <label for="nombre">Nombre</label>
           <input
@@ -32,6 +33,24 @@
     </div>
   </div>
 
+
+  <!-- Filtros -->
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm bg-light">
+    <h2 class="text-center mb-4">Filtrar Proyectos</h2>
+    <div class="row mb-4">
+      <!-- Filtro por Nombre -->
+      <div class="col-md-2">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchText"
+          placeholder="Buscar por nombre"
+        />
+      </div>
+
+
+
   <!-- Sección "Departamentos Registrados" -->
   <div class="container mb-5">
     <div class="card registrados p-4 shadow-sm bg-light">
@@ -45,7 +64,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let departamento of departamentos">
+          <tr *ngFor="let departamento of departamentos | puestoFilter:searchText"> 
             <td>{{ departamento.id }}</td>
             <td>{{ departamento.nombre }}</td>
             <td>
@@ -61,4 +80,4 @@
       </table> 
     </div>
   </div>
-</body>
+

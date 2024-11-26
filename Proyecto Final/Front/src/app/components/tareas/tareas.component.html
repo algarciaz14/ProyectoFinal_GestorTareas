@@ -1,134 +1,163 @@
-<div class="container mt-5">
-  <div class="card crear p-4 shadow-sm bg-light">
-    <h2 class="text-center mb-4">{{ isEditMode ? 'Editar tarea' : 'Crear tarea' }}</h2>
-    <form #tareaForm="ngForm" (ngSubmit)="agregarTarea(tareaForm)">
-
-      
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="nombre">Nombre</label>
-          <input
-            type="text"
-            id="nombre"
-            [(ngModel)]="nuevaTarea.nombre"
-            name="nombre"
-            class="form-control"
-            placeholder="Nombre de la tarea"
-            required
-            minlength="4"
-            maxlength="30"
-            #nombre="ngModel"
-            [ngClass]="{'is-invalid': nombre.invalid && nombre.touched}"
-          />
-          <div *ngIf="nombre.invalid && nombre.touched" class="invalid-feedback">
-            El nombre debe tener entre 4 y 15 caracteres.
+<body>
+  <div class="container mt-5">
+    <div class="card crear p-4 shadow-sm bg-light">
+      <h2 class="text-center mb-4">{{ isEditMode ? 'Editar tarea' : 'Crear tarea' }}</h2>
+      <form #tareaForm="ngForm" (ngSubmit)="agregarTarea(tareaForm)"> 
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="nombre">Nombre</label>
+            <input
+              type="text"
+              id="nombre"
+              [(ngModel)]="nuevaTarea.nombre"
+              name="nombre"
+              class="form-control"
+              placeholder="Nombre de la tarea"
+              required
+              minlength="4"
+              maxlength="30"
+              #nombre="ngModel"
+              [ngClass]="{'is-invalid': nombre.invalid && nombre.touched}"
+            />
+            <div *ngIf="nombre.invalid && nombre.touched" class="invalid-feedback">
+              El nombre debe tener entre 4 y 15 caracteres.
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="prioridad">Prioridad</label>
+            <select
+              id="prioridad"
+              [(ngModel)]="nuevaTarea.prioridad"
+              name="prioridad"
+              class="form-control"
+              required
+            >
+              <option value="" disabled selected>Seleccione una prioridad</option>
+              <option value="Alta">Alta</option>
+              <option value="Baja">Baja</option>
+            </select>
           </div>
         </div>
-        <div class="form-group col-md-6">
-          <label for="prioridad">Prioridad</label>
-          <select
-            id="prioridad"
-            [(ngModel)]="nuevaTarea.prioridad"
-            name="prioridad"
-            class="form-control"
-            required
-          >
-            <option value="" disabled selected>Seleccione una prioridad</option>
-            <option value="Alta">Alta</option>
-            <option value="Baja">Baja</option>
-          </select>
-        </div>
-      </div>
 
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="responsable">Responsable</label>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="responsable">Responsable</label>
+            <select
+              id="responsable"
+              [(ngModel)]="nuevaTarea.responsable"
+              name="responsable"
+              class="form-control"
+              required
+            >
+              <option value="" disabled selected>Seleccione un responsable</option>
+              <option *ngFor="let responsable of responsables" [ngValue]="responsable">
+                {{ responsable.nombre }} {{ responsable.apellido }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="estado">Estado</label>
+            <select
+              id="estado"
+              [(ngModel)]="nuevaTarea.estado"
+              name="estado"
+              class="form-control"
+              required
+            >
+              <option value="" disabled selected>Seleccione un estado</option>
+              <option value="Nuevo">Nuevo</option>
+              <option value="En progreso">En progreso</option>
+              <option value="Cerrado">Cerrado</option>
+              <option value="Rechazado">Rechazado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="proyecto">Proyecto</label>
           <select
-            id="responsable"
-            [(ngModel)]="nuevaTarea.responsable"
-            name="responsable"
+            id="proyecto"
+            [(ngModel)]="nuevaTarea.proyecto"
+            name="proyecto"
             class="form-control"
             required
           >
-            <option value="" disabled selected>Seleccione un responsable</option>
-            <option *ngFor="let responsable of responsables" [ngValue]="responsable">
-              {{ responsable.nombre }} {{ responsable.apellido }}
+            <option value="" disabled selected>Seleccione un proyecto</option>
+            <option *ngFor="let proyecto of proyectos" [ngValue]="proyecto">
+              {{ proyecto.nombre }}
             </option>
           </select>
         </div>
-        <div class="form-group col-md-6">
-          <label for="estado">Estado</label>
-          <select
-            id="estado"
-            [(ngModel)]="nuevaTarea.estado"
-            name="estado"
-            class="form-control"
-            required
-          >
-            <option value="" disabled selected>Seleccione un estado</option>
-            <option value="Nuevo">Nuevo</option>
-            <option value="En progreso">En progreso</option>
-            <option value="Cerrado">Cerrado</option>
-            <option value="Rechazado">Rechazado</option>
-          </select>
-        </div>
-      </div>
 
-      <div class="form-group">
-        <label for="proyecto">Proyecto</label>
-        <select
-          id="proyecto"
-          [(ngModel)]="nuevaTarea.proyecto"
-          name="proyecto"
-          class="form-control"
-          required
-        >
-          <option value="" disabled selected>Seleccione un proyecto</option>
-          <option *ngFor="let proyecto of proyectos" [ngValue]="proyecto">
-            {{ proyecto.nombre }}
-          </option>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="tareaForm.invalid">
+          {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Tareas Registradas</h2>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Buscar por nombre">
+      </div>
+      <div class="col-md-2">
+        <select class="form-control" [(ngModel)]="prioridad">
+          <option value="">Prioridad</option>
+          <option value="Alta">Alta</option>
+          <option value="Baja">Baja</option>
         </select>
       </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" [(ngModel)]="responsable" placeholder="Buscar responsable">
+      </div>
+      <div class="col-md-2">
+        <select class="form-control" [(ngModel)]="estado">
+          <option value="">Estado</option>
+          <option value="Nuevo">Nuevo</option>
+          <option value="En progreso">En progreso</option>
+          <option value="Cerrado">Cerrado</option>
+          <option value="Rechazado">Rechazado</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" [(ngModel)]="proyecto" placeholder="Buscar proyecto">
+      </div>
+    </div>
 
-      <button type="submit" class="btn btn-primary btn-block" [disabled]="tareaForm.invalid">
-        {{ isEditMode ? 'Actualizar' : 'Guardar' }}
-      </button>
-    </form>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Prioridad</th>
+          <th>Responsable</th>
+          <th>Estado</th>
+          <th>Proyecto</th>
+          <th>Fecha de Registro</th>
+          <th>Fecha de Cierre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tarea of tareas | tareaFilter: searchText : prioridad : responsable : estado : proyecto">
+          <td>{{ tarea.id }}</td>
+          <td>{{ tarea.nombre }}</td>
+          <td>{{ tarea.prioridad }}</td>
+          <td>{{ tarea.responsable?.nombre }} {{ tarea.responsable?.apellido }}</td>
+          <td>{{ tarea.estado }}</td>
+          <td>{{ tarea.proyecto?.nombre }}</td>
+          <td>{{ tarea.createAt | date }}</td>
+          <td>{{ tarea.createAtc | date }}</td>
+          <td>
+            <button class="btn btn-warning" (click)="updateTarea(tarea)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="tarea.id ? eliminarTarea(tarea.id) : null">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</div>
-
-<div class="container mt-5">
-  <h2 class="text-center mb-4">Tareas Registradas</h2>
-  <table class="table table-striped table-bordered">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Prioridad</th>
-        <th>Responsable</th>
-        <th>Estado</th>
-        <th>Proyecto</th>
-        <th>Fecha de Registro</th>
-        <th>Fecha de Cierre</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tarea of tareas">
-        <td>{{ tarea.id }}</td>
-        <td>{{ tarea.nombre }}</td>
-        <td>{{ tarea.prioridad }}</td>
-        <td>{{ tarea.responsableNombre }}</td>
-        <td>{{ tarea.estado }}</td>
-        <td>{{ tarea.proyecto?.nombre }}</td>
-        <td>{{ tarea.createAt | date }}</td>
-        <td>{{ tarea.createAtc | date }}</td>
-        <td>
-          <button class="btn btn-success btn-sm" (click)="updateTarea(tarea)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="tarea.id ? eliminarTarea(tarea.id) : null">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
+</body>

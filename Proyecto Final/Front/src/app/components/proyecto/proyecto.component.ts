@@ -12,6 +12,10 @@ import Swal from 'sweetalert2';
 export class ProyectosComponent implements OnInit {
   proyectos: Proyecto[] = [];
   nuevoProyecto: Proyecto = new Proyecto();
+  // Propiedades de filtro
+  searchText: string = '';
+  descripcionFiltro: string = '';
+  
 
   constructor(private proyectoService: ProyectoService) {}
 
@@ -104,7 +108,7 @@ export class ProyectosComponent implements OnInit {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo eliminar el proyecto.',
+                text: 'Error al eliminar el proyecto, ya tiene una tarea asignada.',
               });
             }
           );

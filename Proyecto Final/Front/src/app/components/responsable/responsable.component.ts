@@ -17,6 +17,13 @@ export class ResponsablesComponent implements OnInit {
   departamentos: { id: number; nombre: string }[] = [];
   puestos: { id: number; nombre: string }[] = [];
   isEditMode: boolean = false;
+    // Propiedades de filtro
+    searchText: string = '';
+    apellidoFiltro: string = '';
+    correoFiltro: string = '';
+    celularFiltro: string = '';
+    departamentoFiltro: string = '';
+    puestoFiltro: string = '';
 
   constructor(
     private responsableService: ResponsableService,

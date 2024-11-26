@@ -1,5 +1,4 @@
-<body>
-  <!-- Contenedor de creación de puestos -->
+<!-- Contenedor de creación de puestos -->
   <div class="container ">
     <div class="card crear p-4 shadow-sm bg-light">
       <h2 class="text-center mb-4">Crear Puesto</h2>
@@ -34,6 +33,21 @@
     </div>
   </div>
 
+  <!-- Filtros -->
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm bg-light">
+    <h2 class="text-center mb-4">Filtrar Proyectos</h2>
+    <div class="row mb-4">
+      <!-- Filtro por Nombre -->
+      <div class="col-md-2">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchText"
+          placeholder="Buscar por nombre"
+        />
+      </div>
+
   <!-- Contenedor de puestos registrados -->
   <div class="container mt-5">
     <div class="card registrados p-4 shadow-sm bg-light">
@@ -47,7 +61,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let puesto of puestos">
+          <tr *ngFor="let puesto of puestos | puestoFilter:searchText"> 
             <td>{{ puesto.id }}</td>
             <td>{{ puesto.nombre }}</td>
             <td>
@@ -63,4 +77,3 @@
       </table>
     </div>
   </div>
-</body>

@@ -13,6 +13,11 @@ import { ResponsablesComponent } from './components/responsable/responsable.comp
 
 import { TareasComponent } from './components/tareas/tareas.component';
 import { InicioComponent } from './components/inicio/inicio.component';
+import { TareaFilterPipe } from './filters/tarea-filter.pipe';
+import { ResponsableFilterPipe } from './filters/responsable-filter.pipe';
+import { ProyectoFilterPipe } from './filters/proyecto-filter.pipe';
+import { PuestoFilterPipe } from './filters/puesto-filter.pipe';
+import { DepartamentoFilterPipe } from './filters/departamento-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,12 @@ import { InicioComponent } from './components/inicio/inicio.component';
     PuestosComponent,
     ResponsablesComponent,
     TareasComponent,
-    InicioComponent 
+    InicioComponent,
+    TareaFilterPipe,
+    ResponsableFilterPipe,
+    ProyectoFilterPipe,
+    PuestoFilterPipe,
+    DepartamentoFilterPipe 
   ],
   imports: [
     BrowserModule,

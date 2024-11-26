@@ -2,9 +2,13 @@ export class Tarea {
   id?: number;
   nombre: string;
   prioridad: string;
-  responsable: { id: number, nombre: string, apellido: string } | null;
+  //responsable: { id: number | undefined, nombre: string, apellido: string } | null;
   estado: string;
-  proyecto: { id: number, nombre: string } | null;
+  //proyecto: { id: number | undefined, nombre: string } | null;
+  responsable: { id?: number, nombre: string, apellido: string } | null;
+  proyecto: { id?: number, nombre: string } | null;
+
+  
   createAt: Date;
   createAtc: Date;
   responsableNombre: string | undefined;
@@ -19,3 +23,5 @@ export class Tarea {
     this.createAtc = new Date();  // Fecha de cierre actual
   }
 }
+
+

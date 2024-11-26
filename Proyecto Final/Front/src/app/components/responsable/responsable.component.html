@@ -1,3 +1,4 @@
+<body>
 <div class="container mt-5">
   <div class="card p-4 shadow-sm bg-light">
     <h2 class="text-center mb-4">{{ nuevoResponsable.id ? 'Editar Responsable' : 'Crear Responsable' }}</h2>
@@ -136,6 +137,60 @@
     </form>
   </div>
 </div>
+<!-- Filtros -->
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm bg-light">
+    <h2 class="text-center mb-4">Filtrar Responsables</h2>
+    <div class="row mb-4">
+      <!-- Filtro por Nombre -->
+      <div class="col-md-2">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchText"
+          placeholder="Buscar por nombre"
+        />
+      </div>
+      <!-- Filtro por Apellido -->
+      <div class="col-md-2">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="apellidoFiltro"
+          placeholder="Buscar por apellido"
+        />
+      </div>
+      <!-- Filtro por Correo -->
+      <div class="col-md-2">
+        <input
+          type="email"
+          class="form-control"
+          [(ngModel)]="correoFiltro"
+          placeholder="Buscar por correo"
+        />
+      </div>
+      
+      <!-- Filtro por Departamento -->
+      <div class="col-md-2">
+        <select class="form-control" [(ngModel)]="departamentoFiltro">
+          <option value="">Filtrar por Departamento</option>
+          <option *ngFor="let departamento of departamentos" [value]="departamento.nombre">
+            {{ departamento.nombre }}
+          </option>
+        </select>
+      </div>
+      <!-- Filtro por Puesto -->
+      <div class="col-md-2">
+        <select class="form-control" [(ngModel)]="puestoFiltro">
+          <option value="">Filtrar por Puesto</option>
+          <option *ngFor="let puesto of puestos" [value]="puesto.nombre">
+            {{ puesto.nombre }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Tabla de responsables -->
 <div class="container mt-5">
@@ -155,7 +210,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let responsable of responsables">
+        <tr *ngFor="let responsable of responsables | responsableFilter:searchText:apellidoFiltro:correoFiltro:celularFiltro:departamentoFiltro:puestoFiltro">
           <td>{{ responsable.id }}</td>
           <td>{{ responsable.nombre }}</td>
           <td>{{ responsable.apellido }}</td>
@@ -172,3 +227,4 @@
     </table>
   </div>
 </div>
+</body>

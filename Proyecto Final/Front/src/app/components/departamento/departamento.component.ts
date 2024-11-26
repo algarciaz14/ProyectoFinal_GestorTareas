@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 export class DepartamentosComponent implements OnInit {
   departamentos: Departamento[] = [];
   nuevoDepartamento: Departamento = new Departamento();
+   // Propiedades de filtro
+   searchText: string = '';
 
   constructor(private departamentoService: DepartamentoService) {}
 
@@ -104,7 +106,7 @@ export class DepartamentosComponent implements OnInit {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Error al eliminar el departamento, ya tiene una tarea asignada.',
+                text: 'Error al eliminar el departamento, ya tiene un responsable asignado.',
               });
             }
           );
