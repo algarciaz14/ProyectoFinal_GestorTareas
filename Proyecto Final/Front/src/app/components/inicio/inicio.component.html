@@ -1,134 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Mi Proyecto</title>
-    <style>
-        body {
-            background-color: #d8d5d5; 
-        }
-        /* Estilo del carrusel con animación de desvanecimiento y deslizamiento */
-        .carousel-item {
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
-
-        .carousel-item-next, .carousel-item-prev, .carousel-item.active {
-            opacity: 1;
-        }
-
-        .carousel-item-next {
-            transform: translateX(100%);
-        }
-
-        .carousel-item-prev {
-            transform: translateX(-100%);
-        }
-
-        .carousel-item.active {
-            transform: translateX(0);
-        }
-        
-        .carousel-item img {
-            object-fit: cover;     
-            object-position: center; 
-            width: 100%;          
-            height: 500px;         
-        }
-        
-
-        /* Asegura que todas las tarjetas tengan la misma altura */
-        .card {
-            height: 100%;
-        }
-
-        /* Limitar las imágenes dentro de las tarjetas */
-        .card-img-top {
-            object-fit: cover; 
-            height: 200px; 
-            width: 100%; 
-        }
-
-        /* Estilos para el botón de búsqueda personalizado (color rosa) */
-        .btn-pink {
-            background-color: #f4a6b0; /* Rosa claro */
-            color: #fff; /* Texto blanco */
-        }
-
-         /* Cambia de color cuando se pasa el ratón sobre el botón de búsqueda */
-        .btn-pink:hover {
-            background-color: #ec9bb1; /* Rosa más oscuro al pasar el ratón */
-            color: #fff; /* Texto blanco */
-        }
-
-        /* Estilo para el borde del campo de búsqueda */
-        .form-control.border-primary {
-            border-color: #f4a6b0; /* Rosa claro */
-        }
-
-         /* Estilos adicionales al enfocar el campo de búsqueda */
-        .form-control:focus {
-            border-color: #ec9bb1; /* Rosa más oscuro al enfocar */
-            box-shadow: 0 0 0 .2rem rgba(255, 105, 180, .25); /* Sombra rosa clara */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Gestor de Tareas</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .carousel-item img {
+      object-fit: cover;
+      object-position: center;
+      width: 100%;
+      height: 400px;
+    }
+    .btn-pink {
+      background-color: #f4a6b0;
+      color: #fff;
+    }
+    .btn-pink:hover {
+      background-color: #ec9bb1;
+      color: #fff;
+    }
+    .form-control:focus {
+      border-color: #ec9bb1;
+      box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
+    }
+    .result-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+    .result-card h5 {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .result-card .badge {
+      margin-left: 10px;
+    }
+    .result-card .details {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+  </style>
 </head>
 <body>
-    <!-- Formulario de búsqueda en la página -->
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                    <button class="btn btn-pink" type="submit">Buscar</button>
-                </form>
-            </div>
-        </div>
+  <!-- Formulario de búsqueda (arriba del carrusel) -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <form (ngSubmit)="onSearch()" class="d-flex">
+          <input 
+            [(ngModel)]="searchTerm" 
+            name="search" 
+            class="form-control border-primary me-2" 
+            type="search" 
+            placeholder="Buscar cualquier entidad..." 
+            aria-label="Buscar"
+            required>
+          <button class="btn btn-pink" type="submit">Buscar</button>
+        </form>
+      </div>
     </div>
-    
-    <!-- Carrusel de imágenes -->
-    <div id="carouselExampleIndicators" class="carousel slide mt-3" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
-        </div>
-        
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="assets/img/responsable.png" class="d-block" alt="Responsable">
-            </div>
-            <div class="carousel-item">
-                <img src="assets/img/departamento.png" class="d-block" alt="Departamento">
-            </div>
-            <div class="carousel-item">
-                <img src="assets/img/proyecto.png" class="d-block" alt="Proyecto">
-            </div>
-            <div class="carousel-item">
-                <img src="assets/img/tareas.png" class="d-block" alt="Tareas">
-            </div>
-            <div class="carousel-item">
-                <img src="assets/img/Puesto.png" class="d-block" alt="Puesto">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
-    </div>
+  </div>
 
-    <!-- Espacio en blanco debajo del carrusel -->
-    <div style="height: 500px;"></div> 
-    
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <!-- Carrusel de imágenes -->
+  <div id="carouselExampleIndicators" class="carousel slide mt-4" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="assets/img/responsable.png" class="d-block w-100" alt="Responsable">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/img/departamento.png" class="d-block w-100" alt="Departamento">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/img/proyecto.png" class="d-block w-100" alt="Proyecto">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/img/tareas.png" class="d-block w-100" alt="Tareas">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/img/puesto.png" class="d-block w-100" alt="Puesto">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+
+  <div class="container mt-4">
+    <!-- Mostrar título "Resultados" si hay una búsqueda activa -->
+    <div *ngIf="searchProcessedTerm" class="text-center mb-4">
+      <h2 class="fw-bold">Resultados</h2>
+    </div>
+  
+    <!-- Mensaje si no hay resultados -->
+    <div 
+      *ngIf="searchProcessedTerm && (datosCombinados | busquedaGeneral: searchProcessedTerm)?.length === 0" 
+      class="alert alert-warning text-center">
+      No se encontraron resultados para "{{ searchProcessedTerm }}".
+    </div>
+  
+    <!-- Resultados de la búsqueda -->
+    <div *ngIf="searchProcessedTerm">
+      <ng-container *ngFor="let item of datosCombinados | busquedaGeneral: searchProcessedTerm">
+        <!-- Mostrar datos del Responsable -->
+        <div 
+          *ngIf="item.tipo === 'Responsable' && item.nombre && item.apellido" 
+          class="mb-3 result-card">
+          <h5>Nombre: {{ item.nombre }} {{ item.apellido }}</h5>
+          <p><strong>Correo:</strong> {{ item.correo }}</p>
+          <p><strong>Celular:</strong> {{ item.celular }}</p>
+          <p><strong>Puesto:</strong> {{ item.puesto?.nombre || 'Sin puesto' }}</p>
+          <p><strong>Departamento:</strong> {{ item.departamento?.nombre || 'Sin departamento' }}</p>
+          
+          <div *ngIf="item.tareas && item.tareas.length > 0">
+            <h6>Tareas asignadas:</h6>
+            <ul class="list-group">
+              <li *ngFor="let tarea of item.tareas" class="list-group-item">
+                <strong>{{ tarea.nombre }}</strong> - {{ tarea.prioridad }}<br>
+                <strong>Estado:</strong> {{ tarea.estado }}<br>
+                <strong>Proyecto:</strong> {{ tarea.proyecto?.nombre || 'Sin proyecto' }}<br>
+                <strong>Fecha de Registro:</strong> {{ tarea.createAt | date: 'shortDate' }}<br>
+                <strong>Fecha de Cierre:</strong> {{ tarea.createAtc | date: 'shortDate' }}<br>
+                <p><strong>Descripción:</strong> {{ tarea.descripcion || 'Sin descripción' }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+  
+        <!-- Mostrar datos de Proyecto -->
+        <div 
+          *ngIf="item.tipo === 'Proyecto' && item.nombre" 
+          class="mb-3 result-card">
+          <h5>Proyecto: {{ item.nombre }}</h5>
+          <p><strong>Descripción:</strong> {{ item.descripcion || 'Sin descripción' }}</p>
+        </div>
+  
+        <!-- Mostrar datos de Puesto -->
+        <div 
+          *ngIf="item.tipo === 'Puesto' && item.nombre" 
+          class="mb-3 result-card">
+          <h5>Puesto: {{ item.nombre }}</h5>
+        </div>
+  
+        <!-- Mostrar datos de Departamento -->
+        <div 
+          *ngIf="item.tipo === 'Departamento' && item.nombre" 
+          class="mb-3 result-card">
+          <h5>Departamento: {{ item.nombre }}</h5>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

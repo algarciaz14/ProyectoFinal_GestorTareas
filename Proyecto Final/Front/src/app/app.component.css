@@ -1,0 +1,238 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Asegura que el contenido principal ocupe el espacio disponible */
+  main {
+    flex-grow: 1; /* Esto asegura que el footer se empuje hacia abajo */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    position: relative;
+  }
+
+  footer a {
+    color: white;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Fondo de la página */
+body {
+  background-color: #f4f6f9; /* Fondo gris claro más suave */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía más moderna */
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilos para la tarjeta de "Crear" */
+.card.crear {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px; /* Bordes más redondeados */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
+  padding: 25px;
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+.card.crear:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra en hover para dar dinamismo */
+}
+
+.card.crear h2 {
+  color: #4CAF50; /* Título verde para resaltar */
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la tarjeta de "Registrados" */
+.card.registrados {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.card.registrados h2 {
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* Estilo para las tablas */
+.table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra sutil para la tabla */
+}
+
+.table th {
+  background-color: #4CAF50;
+  color: white;
+  text-align: left;
+  padding: 12px;
+  font-size: 1.1rem;
+}
+
+.table td {
+  background-color: #fff;
+  padding: 12px;
+  font-size: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: #f9f9f9; /* Fila alterna en gris claro */
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1; /* Hover con un tono gris claro */
+}
+
+.table .btn {
+  margin-right: 5px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Filtros de búsqueda */
+.form-control {
+  background-color: #f8f9fa; /* Fondo claro para los filtros */
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+/* Botones de acción */
+.btn {
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Botón de guardar (azul) */
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Mensajes de error */
+.is-invalid {
+  border-color: #dc3545 !important; /* Rojo para los inputs con error */
+}
+
+.invalid-feedback {
+  color: #dc3545; /* Rojo para el texto de error */
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+/* Estilo para los títulos de formularios y secciones */
+h2 {
+  font-size: 1.6rem;
+  color: #343a40;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo para los contenedores de formularios y registros */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Estilo de fondo alternado de las tablas */
+.table tbody tr:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+/* Filtros de búsqueda más atractivos */
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.input-group input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+/* Estilo del contenedor de los formularios y tablas */
+.card-body {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}

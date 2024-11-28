@@ -17,6 +17,7 @@ export class ResponsablesComponent implements OnInit {
   departamentos: { id: number; nombre: string }[] = [];
   puestos: { id: number; nombre: string }[] = [];
   isEditMode: boolean = false;
+  
     // Propiedades de filtro
     searchText: string = '';
     apellidoFiltro: string = '';

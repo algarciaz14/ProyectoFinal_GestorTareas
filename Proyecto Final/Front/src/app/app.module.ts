@@ -18,6 +18,7 @@ import { ResponsableFilterPipe } from './filters/responsable-filter.pipe';
 import { ProyectoFilterPipe } from './filters/proyecto-filter.pipe';
 import { PuestoFilterPipe } from './filters/puesto-filter.pipe';
 import { DepartamentoFilterPipe } from './filters/departamento-filter.pipe';
+import { BusquedaGeneralPipe } from './filters/busqueda-general.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { DepartamentoFilterPipe } from './filters/departamento-filter.pipe';
     ResponsableFilterPipe,
     ProyectoFilterPipe,
     PuestoFilterPipe,
-    DepartamentoFilterPipe 
+    DepartamentoFilterPipe,
+    BusquedaGeneralPipe 
   ],
   imports: [
     BrowserModule,

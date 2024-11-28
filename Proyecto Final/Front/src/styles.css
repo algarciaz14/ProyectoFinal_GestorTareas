@@ -1,0 +1,47 @@
+/* Establece que el body y html llenen toda la altura del viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Contenedor principal del app-root */
+  app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ocupa toda la altura del viewport */
+  }
+  
+  /* Usar Flexbox para que el contenido se distribuya bien y el footer quede al final */
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Asegura que el footer quede al final */
+  }
+  
+  /* Asegura que el contenido principal (componente raíz) ocupa todo el espacio disponible */
+  main {
+    flex-grow: 1; /* Esto empuja el footer hacia abajo */
+  }
+  
+  /* Estilo para el footer */
+  footer {
+    background-color: #343a40;  /* Color de fondo */
+    color: white;  /* Texto en blanco */
+    text-align: center;
+    padding: 10px 0;  /* Espaciado */
+    width: 100%;  /* Asegura que ocupe todo el ancho */
+    position: relative;
+  }
+  
+  /* Para los enlaces en el footer */
+  footer a {
+    color: white; /* Color blanco para los enlaces */
+    text-decoration: none; /* Sin subrayado */
+  }
+  
+  footer a:hover {
+    text-decoration: underline; /* Subraya los enlaces cuando se pasa el ratón */
+  }
+  

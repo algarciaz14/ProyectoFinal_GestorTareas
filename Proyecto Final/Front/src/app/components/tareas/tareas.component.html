@@ -4,10 +4,10 @@
       <h2 class="text-center mb-4">{{ isEditMode ? 'Editar tarea' : 'Crear tarea' }}</h2>
       <form #tareaForm="ngForm" (ngSubmit)="agregarTarea(tareaForm)"> 
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-6"> 
             <label for="nombre">Nombre</label>
             <input
-              type="text"
+              type="text" 
               id="nombre"
               [(ngModel)]="nuevaTarea.nombre"
               name="nombre"
@@ -153,7 +153,8 @@
           <td>{{ tarea.createAt | date }}</td>
           <td>{{ tarea.createAtc | date }}</td>
           <td>
-            <button class="btn btn-warning" (click)="updateTarea(tarea)">Editar</button>
+            <button class="btn btn-success" (click)="updateTarea(tarea)">Editar</button>
+
             <button class="btn btn-danger btn-sm" (click)="tarea.id ? eliminarTarea(tarea.id) : null">Eliminar</button>
           </td>
         </tr>

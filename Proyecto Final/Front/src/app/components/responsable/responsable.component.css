@@ -1,15 +1,15 @@
 /* Fondo de la página */
 body {
-  background-color: #d8d5d5; /* Gris claro para un fondo visible */
   font-family: Arial, sans-serif;
   color: #333;
   margin: 0;
   padding: 0;
+  background-color: #f4f6f9;
 }
 
 /* Estilos para la tarjeta de "Crear" */
 .card.crear {
-  background-color: #ede5e5;
+  background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -18,24 +18,27 @@ body {
 }
 
 .card.crear h2 {
-  color: #106dd0; 
+  color: #000000; /* Color negro para resaltar el título de la sección de creación */
+  font-size: 1.8rem;
   font-weight: bold;
-  
+  text-align: center;
 }
 
-/* Estilos para la tabla de "Registrados" */
+/* Estilos para la tarjeta de "Registrados" */
 .card.registrados {
-  background-color: #ede5e5;
+  background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  margin-bottom: 30px;
 }
 
 .card.registrados h2 {
-  color: #106dd0;
+  color: #333;
   font-weight: bold;
   text-align: center;
+  font-size: 1.8rem;
 }
 
 /* Tabla en la sección de registrados */
@@ -46,6 +49,7 @@ body {
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 
 .table th {
@@ -53,12 +57,15 @@ body {
   color: white;
   text-align: left;
   padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .table td {
   background-color: #fff;
   padding: 12px;
   border-bottom: 1px solid #ddd;
+  font-size: 1rem;
 }
 
 .table tbody tr:nth-child(even) td {
@@ -67,11 +74,27 @@ body {
 
 .table tbody tr:hover {
   background-color: #f1f1f1;
+  cursor: pointer;
 }
 
 /* Botones de acción */
+.btn-primary {
+  background-color: #007bff; /* Botón guardar: azul */
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
 .btn-success {
-  background-color: #28a745;
+  background-color: #28a745; /* Botón editar: verde */
   border: none;
   color: white;
   padding: 8px 12px;
@@ -86,7 +109,7 @@ body {
 }
 
 .btn-danger {
-  background-color: #dc3545;
+  background-color: #dc3545; /* Botón eliminar: rojo */
   border: none;
   color: white;
   padding: 8px 12px;
@@ -98,4 +121,97 @@ body {
 
 .btn-danger:hover {
   background-color: #c82333;
+}
+
+/* Estilos para los campos del formulario */
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: none;
+  padding: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(0, 160, 78, 0.5);
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+}
+
+/* Estilos para los filtros */
+.row.mb-4 {
+  margin-bottom: 30px;
+}
+
+input[type="text"], select.form-control {
+  margin-bottom: 10px;
+}
+
+input[type="text"] {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: none;
+  padding: 8px;
+  font-size: 14px;
+}
+
+select.form-control {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: none;
+  padding: 8px;
+  font-size: 14px;
+}
+
+select.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Filtros más llamativos */
+.row.mb-4 .col-md-3, .row.mb-4 .col-md-2 {
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.row.mb-4 .col-md-3 input[type="text"], 
+.row.mb-4 .col-md-2 select {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilos para las filas de la tabla con bordes */
+.table tbody tr {
+  border-top: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+/* Mensajes de confirmación */
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.alert-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.alert-danger {
+  background-color: #dc3545;
+  color: white;
 }
