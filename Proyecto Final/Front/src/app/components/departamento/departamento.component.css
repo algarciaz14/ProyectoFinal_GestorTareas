@@ -9,13 +9,14 @@ body {
 
 /* Estilos para la tarjeta de "Crear" */
 .card.crear {
-  background-color: #eaf4fc;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 30px;
+  background-color: #eaf4fc !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  padding: 20px !important;
+  margin-bottom: 30px !important;
 }
+
 
 .card.crear h2 {
   color: #000;
@@ -25,12 +26,12 @@ body {
 
 /* Estilos para la tarjeta de "Registrados" */
 .card.registrados {
-  background-color: #eaf4fc;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 30px;
+  background-color: #eaf4fc !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  padding: 20px !important;
+  margin-bottom: 30px !important;
 }
 
 .card.registrados h2 {

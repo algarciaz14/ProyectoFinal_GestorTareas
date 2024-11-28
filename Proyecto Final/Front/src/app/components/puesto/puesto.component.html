@@ -1,10 +1,12 @@
-<!-- Contenedor de creación de puestos -->
-<div class="container mt-5">
-    <div class="card crear p-4 shadow-sm bg-light">
-      <h2 class="text-center mb-4">Crear Puesto</h2>
+<body>
+  <!-- Contenedor de creación de puestos -->
+  <div class="container mt-5">
+    <div class="card crear p-4 shadow-sm">
+      <h2 class="mb-4 text-center">{{ nuevoPuesto.id ? 'Editar Puesto' : 'Crear Puesto' }}</h2>
       <form #puestoForm="ngForm" (ngSubmit)="agregarPuesto(puestoForm)">
+        <!-- Campo de Nombre del Puesto -->
         <div class="form-group">
-          <label for="nombre">Nombre</label>
+          <label for="nombre">Nombre del Puesto</label>
           <input
             type="text"
             id="nombre"
@@ -25,50 +27,53 @@
             <div *ngIf="nombre.errors?.['maxlength']">El nombre no puede tener más de 30 caracteres.</div>
           </div>
         </div>
-        
+
+        <!-- Botón Guardar/Actualizar -->
         <button type="submit" class="btn btn-primary btn-block" [disabled]="puestoForm.invalid">
-          Guardar
+          {{ nuevoPuesto.id ? 'Actualizar' : 'Guardar' }}
         </button>
       </form>
     </div>
   </div>
 
-  <!-- Filtros -->
-<div class="container mt-5">
-  <div class="card p-4 shadow-sm bg-light">
-    <h2 class="text-center mb-4">Filtrar Proyectos</h2>
-    <div class="row mb-4">
-      <!-- Filtro por Nombre -->
-      <div class="col-md-2">
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="searchText"
-          placeholder="Buscar por nombre"
-        />
+  <!-- Contenedor de Puestos Registrados -->
+  <div class="container mt-5">
+    <div class="card registrados p-4 shadow-sm">
+      <h2 class="mb-4 text-center">Puestos Registrados</h2>
+
+      <!-- Filtros dentro de la tabla -->
+      <div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
+        <div class="col-12 d-flex justify-content-center flex-wrap">
+          <!-- Filtro por Nombre -->
+          <div class="px-2 mb-2" style="min-width: 180px;">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="searchText"
+              placeholder="Buscar por nombre"
+            />
+          </div>
+        </div>
       </div>
 
-  <!-- Contenedor de puestos registrados -->
-  <div class="container mt-5">
-    <div class="card registrados p-4 shadow-sm bg-light">
-      <h2 class="text-center mb-4">Puestos Registrados</h2>
+      <!-- Tabla de Puestos -->
       <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
+        <thead>
           <tr>
             <th>ID</th>
-            <th>Nombre Puesto</th>
+            <th>Nombre del Puesto</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let puesto of puestos | puestoFilter:searchText"> 
+          <tr *ngFor="let puesto of puestos | puestoFilter:searchText">
             <td>{{ puesto.id }}</td>
             <td>{{ puesto.nombre }}</td>
             <td>
-              <button type="button" class="btn btn-success mr-2" (click)="updatePuesto(puesto)">
+              <button class="btn btn-success btn-sm mr-2" (click)="updatePuesto(puesto)">
                 Editar
               </button>
-              <button type="button" class="btn btn-danger" (click)="eliminarPuesto(puesto.id)">
+              <button class="btn btn-danger btn-sm" (click)="eliminarPuesto(puesto.id)">
                 Eliminar
               </button>
             </td>
@@ -77,3 +82,5 @@
       </table>
     </div>
   </div>
+</body>
+

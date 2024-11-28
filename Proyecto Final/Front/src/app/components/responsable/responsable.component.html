@@ -1,15 +1,15 @@
 <body>
   <!-- Formulario Crear Responsable -->
   <div class="container mt-5">
-    <div class="card p-4 shadow-sm" style="background-color: #eaf4fc; border-radius: 8px;">
-      <h2 class="text-center mb-4">{{ nuevoResponsable.id ? 'Editar Responsable' : 'Crear Responsable' }}</h2>
+    <div class="card crear p-4 shadow-sm">
+      <h2 class="mb-4">{{ nuevoResponsable.id ? 'Editar Responsable' : 'Crear Responsable' }}</h2>
       <form #responsableForm="ngForm" (ngSubmit)="agregarResponsable(responsableForm)">
         <!-- Fila 1: Nombre y Apellido -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="nombre">Nombre</label> 
+            <label for="nombre">Nombre</label>
             <input
-              type="text" 
+              type="text"
               id="nombre"
               [(ngModel)]="nuevoResponsable.nombre"
               name="nombre"
@@ -139,8 +139,8 @@
 
   <!-- Tabla de Responsables -->
   <div class="container mt-5">
-    <div class="card p-4 shadow-sm bg-light">
-      <h2 class="text-center mb-4">Responsables Registrados</h2>
+    <div class="card registrados p-4 shadow-sm">
+      <h2 class="mb-4">Responsables Registrados</h2>
 
       <!-- Filtros dentro de la tabla -->
       <div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
@@ -224,5 +224,5 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </div> 
 </body>

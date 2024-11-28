@@ -7,33 +7,48 @@ body {
   background-color: #f4f6f9;
 }
 
-/* Estilos para las tarjetas */
-.card {
-  background-color: #eaf4fc;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 30px;
+/* Estilos para la tarjeta de "Crear" */
+.card.crear {
+  background-color: #eaf4fc !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  padding: 20px !important;
+  margin-bottom: 30px !important;
 }
 
-.card h2 {
+
+body .card.crear {
+  background-color: #eaf4fc;
+}
+
+body .card.registrados {
+  background-color: #eaf4fc;
+}
+
+.card.crear h2 {
   color: #000;
   font-size: 1.8rem;
   text-align: center;
 }
 
-/* Estilos para la tarjeta de "Crear Proyecto" */
-.card.crear h2 {
-  color: #000;
+/* Estilos para la tarjeta de "Registrados" */
+
+
+.card.registrados {
+  background-color: #eaf4fc !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  padding: 20px !important;
+  margin-bottom: 30px !important;
 }
 
-/* Estilos para la tarjeta de "Proyectos Registrados" */
 .card.registrados h2 {
   color: #333;
   font-weight: bold;
-  font-size: 1.8rem;
   text-align: center;
+  font-size: 1.8rem;
 }
 
 /* Tabla en la sección de registrados */
