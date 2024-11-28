@@ -1,15 +1,15 @@
 /* Fondo de la página */
 body {
   font-family: Arial, sans-serif;
-  color: #333;
+  color: #333333;
   margin: 0;
   padding: 0;
   background-color: #f4f6f9;
 }
 
-/* Estilos para la tarjeta de "Crear" */
-.card.crear {
-  background-color: #ffffff;
+/* Estilos para las tarjetas */
+.card {
+  background-color: #eaf4fc;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -17,28 +17,23 @@ body {
   margin-bottom: 30px;
 }
 
-.card.crear h2 {
-  color: #000000; /* Color negro para resaltar el título de la sección de creación */
+.card h2 {
+  color: #000;
   font-size: 1.8rem;
-  font-weight: bold;
   text-align: center;
 }
 
-/* Estilos para la tarjeta de "Registrados" */
-.card.registrados {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 30px;
+/* Estilos para la tarjeta de "Crear Proyecto" */
+.card.crear h2 {
+  color: #000;
 }
 
+/* Estilos para la tarjeta de "Proyectos Registrados" */
 .card.registrados h2 {
   color: #333;
   font-weight: bold;
-  text-align: center;
   font-size: 1.8rem;
+  text-align: center;
 }
 
 /* Tabla en la sección de registrados */
@@ -68,7 +63,11 @@ body {
   font-size: 1rem;
 }
 
-.table tbody tr:nth-child(even) td {
+.table tbody tr:nth-child(odd) {
+  background-color: #c7bcbc;
+}
+
+.table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
@@ -79,7 +78,7 @@ body {
 
 /* Botones de acción */
 .btn-primary {
-  background-color: #007bff; /* Botón guardar: azul */
+  background-color: #007bff;
   border: none;
   color: white;
   padding: 8px 12px;
@@ -94,7 +93,7 @@ body {
 }
 
 .btn-success {
-  background-color: #28a745; /* Botón editar: verde */
+  background-color: #28a745;
   border: none;
   color: white;
   padding: 8px 12px;
@@ -109,7 +108,7 @@ body {
 }
 
 .btn-danger {
-  background-color: #dc3545; /* Botón eliminar: rojo */
+  background-color: #dc3545;
   border: none;
   color: white;
   padding: 8px 12px;
@@ -156,15 +155,7 @@ input[type="text"], select.form-control {
   margin-bottom: 10px;
 }
 
-input[type="text"] {
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  box-shadow: none;
-  padding: 8px;
-  font-size: 14px;
-}
-
-select.form-control {
+select.form-control, input[type="text"] {
   border-radius: 5px;
   border: 1px solid #ccc;
   box-shadow: none;
@@ -182,21 +173,6 @@ select.form-control:focus {
   background-color: #f1f1f1;
   border-radius: 5px;
   padding: 10px;
-}
-
-.row.mb-4 .col-md-3 input[type="text"], 
-.row.mb-4 .col-md-2 select {
-  font-size: 14px;
-  color: #333;
-}
-
-/* Estilos para las filas de la tabla con bordes */
-.table tbody tr {
-  border-top: 1px solid #ddd;
-}
-
-.table tbody tr:nth-child(odd) {
-  background-color: #fafafa;
 }
 
 /* Mensajes de confirmación */
