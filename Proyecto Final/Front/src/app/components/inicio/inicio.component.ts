@@ -17,6 +17,7 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent implements OnInit {
+  //Propiedades para nuestro filtro búsqueda general
   searchTerm: string = ''; // Término de búsqueda
   datosCombinados: any[] = []; // Datos combinados de todas las entidades
   searchProcessedTerm: string = ''; // Término procesado para la búsqued

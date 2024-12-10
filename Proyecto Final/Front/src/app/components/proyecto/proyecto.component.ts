@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProyectoService } from '../../services/proyecto.service';
 import { Proyecto } from '../../models/proyecto.model';
 import Swal from 'sweetalert2';
@@ -11,120 +11,118 @@ import Swal from 'sweetalert2';
 })
 export class ProyectosComponent implements OnInit {
   proyectos: Proyecto[] = [];
-  nuevoProyecto: Proyecto = new Proyecto();
-  // Propiedades de filtro
+  proyectoForm!: FormGroup; // Uso del operador '!' para indicar que se inicializa en ngOnInit
   searchText: string = '';
   descripcionFiltro: string = '';
-  
 
-  constructor(private proyectoService: ProyectoService) {}
+  // Propiedades para paginación
+  page: number = 1; // Página inicial
+  pageSize: number = 5; // Tamaño de página
+  totalDepartamentos: number = 0; // Total de departamentos
+
+  constructor(private proyectoService: ProyectoService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.proyectoForm = this.fb.group({
+      id: [null],
+      nombre: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(50),
+          Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$'), // Solo letras y espacios
+        ],
+      ],
+      descripcion: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(50),
+          Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$'), // Solo letras y espacios
+        ],
+      ],
+    });
     this.obtenerProyectos();
   }
+  
 
-  // Obtener todos los proyectos
   obtenerProyectos(): void {
     this.proyectoService.getProyectos().subscribe(
-      (proyectos) => {
-        this.proyectos = proyectos;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudieron obtener los proyectos.',
-        });
-      }
+      (proyectos) => (this.proyectos = proyectos),
+      () => Swal.fire('Error', 'No se pudieron obtener los proyectos.', 'error')
     );
   }
 
-  // Crear o actualizar un proyecto
-  agregarProyecto(form: NgForm): void {
-    if (this.nuevoProyecto.id) {
-      // Actualizar proyecto
-      this.proyectoService.updateProyecto(this.nuevoProyecto).subscribe(
-        () => {
+  agregarProyecto(): void {
+    if (this.proyectoForm.valid) {
+      const proyecto = this.proyectoForm.value;
+
+      if (proyecto.id) {
+        this.proyectoService.updateProyecto(proyecto).subscribe(() => {
           this.obtenerProyectos();
-          this.resetearFormulario(form);
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'Proyecto actualizado correctamente.',
-          });
-        },
-        (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo actualizar el proyecto.',
-          });
-        }
-      );
-    } else {
-      // Crear nuevo proyecto
-      this.proyectoService.createProyecto(this.nuevoProyecto).subscribe(
-        () => {
+          this.resetearFormulario();
+          Swal.fire('Éxito', 'Proyecto actualizado correctamente.', 'success');
+        });
+      } else {
+        this.proyectoService.createProyecto(proyecto).subscribe(() => {
           this.obtenerProyectos();
-          this.resetearFormulario(form);
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'Proyecto creado correctamente.',
-          });
-        },
-        (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo crear el proyecto.',
-          });
-        }
-      );
+          this.resetearFormulario();
+          Swal.fire('Éxito', 'Proyecto creado correctamente.', 'success');
+        });
+      }
     }
   }
 
-  // Eliminar un proyecto
-  eliminarProyecto(id: number | undefined): void {
-    if (id !== undefined) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Este proyecto se eliminará permanentemente.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, eliminar',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.proyectoService.deleteProyecto(id).subscribe(
-            () => {
-              this.proyectos = this.proyectos.filter(
-                (proyecto) => proyecto.id !== id
-              );
-              Swal.fire('¡Eliminado!', 'El proyecto ha sido eliminado.', 'success');
-            },
-            (error) => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al eliminar el proyecto, ya tiene una tarea asignada.',
-              });
-            }
-          );
-        }
-      });
-    }
-  }
-
-  // Rellenar formulario para editar un proyecto
   updateProyecto(proyecto: Proyecto): void {
-    this.nuevoProyecto = { ...proyecto };
+    this.proyectoForm.patchValue(proyecto);
   }
 
-  // Resetear el formulario
-  private resetearFormulario(form: NgForm): void {
-    this.nuevoProyecto = new Proyecto();
-    form.resetForm();
+  eliminarProyecto(id?: number): void {
+    if (id === undefined) {
+      Swal.fire({
+        title: 'Error',
+        text: 'El ID del proyecto no es válido.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar', 
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.proyectoService.deleteProyecto(id).subscribe(() => {
+          this.proyectos = this.proyectos.filter(proyecto => proyecto.id !== id);
+
+          Swal.fire({
+            title: 'Eliminado',
+            text: 'El proyecto se eliminó correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        }, error => {
+          Swal.fire({
+            title: 'Error',
+            text: 'No se puede eliminar proyecto, porque ya tiene una tarea asignada.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+          });
+        });
+      }
+    });
+  }
+  resetearFormulario(): void {
+    this.proyectoForm.reset();
   }
 }
+

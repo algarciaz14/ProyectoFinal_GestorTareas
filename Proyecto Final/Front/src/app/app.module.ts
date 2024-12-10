@@ -19,6 +19,7 @@ import { ProyectoFilterPipe } from './filters/proyecto-filter.pipe';
 import { PuestoFilterPipe } from './filters/puesto-filter.pipe';
 import { DepartamentoFilterPipe } from './filters/departamento-filter.pipe';
 import { BusquedaGeneralPipe } from './filters/busqueda-general.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { BusquedaGeneralPipe } from './filters/busqueda-general.pipe';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

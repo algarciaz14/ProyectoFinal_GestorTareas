@@ -1,31 +1,31 @@
 <!-- Sección "Crear Departamento" -->
-<div class="container mt-5">
+<div class="container mt-5"> 
   <div class="card crear p-4 shadow-sm bg-light">
     <h2 class="text-center mb-4">Crear Departamento</h2>
-    <form #departamentoForm="ngForm" (ngSubmit)="agregarDepartamento(departamentoForm)">
-      
+    <form [formGroup]="departamentoForm" (ngSubmit)="agregarDepartamento()">
+      <!-- Campo de entrada para el nombre del departamento -->
       <div class="form-group">
         <label for="nombre">Nombre</label>
         <input
           type="text"
-          id="nombre"
-          [(ngModel)]="nuevoDepartamento.nombre"
-          name="nombre"
+          id="nombre" 
+          formControlName="nombre" 
           class="form-control"
           placeholder="Nombre del departamento"
-          required
-          minlength="4"
-          maxlength="20"
-          #nombre="ngModel"
-          [ngClass]="{ 'is-invalid': nombre.touched && nombre.invalid }"
+          [ngClass]="{
+            'is-invalid': departamentoForm.get('nombre')?.touched && departamentoForm.get('nombre')?.invalid
+          }"
         />
-        <div *ngIf="nombre.touched && nombre.invalid" class="invalid-feedback">
-          <div *ngIf="nombre.errors?.['required']">El nombre es obligatorio.</div>
-          <div *ngIf="nombre.errors?.['minlength']">Debe tener al menos 4 caracteres.</div>
-          <div *ngIf="nombre.errors?.['maxlength']">No puede exceder los 50 caracteres.</div>
+        <!-- Validaciones y mensajes de error -->
+        <div *ngIf="departamentoForm.get('nombre')?.touched && departamentoForm.get('nombre')?.invalid" class="invalid-feedback">
+          <div *ngIf="departamentoForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</div>
+          <div *ngIf="departamentoForm.get('nombre')?.errors?.['minlength']">Debe tener al menos 4 caracteres.</div>
+          <div *ngIf="departamentoForm.get('nombre')?.errors?.['maxlength']">No puede exceder los 50 caracteres.</div>
+          <div *ngIf="departamentoForm.get('nombre')?.errors?.['pattern']">El nombre solo puede contener letras y espacios.</div>
         </div>
       </div>
 
+      <!-- Botón para guardar el departamento -->
       <button type="submit" class="btn btn-primary btn-block" [disabled]="departamentoForm.invalid">
         Guardar
       </button>
@@ -53,30 +53,37 @@
       </div>
     </div>
 
-    <!-- Tabla de Departamentos -->
-    <table class="table table-striped table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th>ID</th>
-          <th>Nombre Departamento</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let departamento of departamentos | puestoFilter:searchText">
-          <td>{{ departamento.id }}</td>
-          <td>{{ departamento.nombre }}</td>
-          <td>
-            <button type="button" class="btn btn-success mr-2" (click)="updateDepartamento(departamento)">
-              Editar
-            </button>
-            <button type="button" class="btn btn-danger" (click)="eliminarDepartamento(departamento.id)">
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+   <!-- Tabla de Departamentos -->
+<table class="table table-striped table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>Nombre Departamento</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let departamento of departamentos | departamentoFilter:searchText | paginate: { itemsPerPage: pageSize, currentPage: page }">
+      <td>{{ departamento.id }}</td>
+      <td>{{ departamento.nombre }}</td>
+      <td>
+        <button type="button" class="btn btn-success mr-2" (click)="updateDepartamento(departamento)">
+          Editar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="eliminarDepartamento(departamento.id)">
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
+<!-- Componente de Paginación -->
+<pagination-controls
+  (pageChange)="page = $event"
+  [responsive]="true"
+  previousLabel="Anterior"
+  nextLabel="Siguiente"
+  class="d-flex justify-content-center mt-4">
+</pagination-controls>

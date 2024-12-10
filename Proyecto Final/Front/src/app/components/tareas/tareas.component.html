@@ -3,7 +3,7 @@
     <!-- Sección de Crear Tarea -->
     <div class="card crear p-4 shadow-sm">
       <h2 class="text-center mb-4">{{ isEditMode ? 'Editar tarea' : 'Crear tarea' }}</h2>
-      <form #tareaForm="ngForm" (ngSubmit)="agregarTarea(tareaForm)">
+      <form [formGroup]="tareaForm" (ngSubmit)="onSubmit()">
         <!-- Fila 1: Nombre y Prioridad -->
         <div class="row">
           <div class="col-md-6">
@@ -12,18 +12,17 @@
               <input
                 type="text"
                 id="nombre"
-                [(ngModel)]="nuevaTarea.nombre"
-                name="nombre"
+                formControlName="nombre"
                 class="form-control"
                 placeholder="Nombre de la tarea"
-                required
-                minlength="4"
-                maxlength="30"
-                #nombre="ngModel"
-                [ngClass]="{'is-invalid': nombre.invalid && nombre.touched}"
+                [ngClass]="{ 'is-invalid': tareaForm.get('nombre')?.invalid && tareaForm.get('nombre')?.touched }"
               />
-              <div *ngIf="nombre.invalid && nombre.touched" class="invalid-feedback">
-                El nombre debe tener entre 4 y 15 caracteres.
+              <!-- Mensajes de error -->
+              <div *ngIf="tareaForm.get('nombre')?.invalid && tareaForm.get('nombre')?.touched" class="invalid-feedback">
+              <div *ngIf="tareaForm.get('nombre')?.hasError('required')">El nombre es obligatorio.</div>
+              <div *ngIf="tareaForm.get('nombre')?.hasError('minlength')">El nombre debe tener al menos 4 caracteres.</div>
+              <div *ngIf="tareaForm.get('nombre')?.hasError('maxlength')">El nombre no puede exceder 30 caracteres.</div>
+              <div *ngIf="tareaForm.get('nombre')?.hasError('pattern')">El nombre no puede contener números ni caracteres especiales.</div>
               </div>
             </div>
           </div>
@@ -32,12 +31,11 @@
               <label for="prioridad">Prioridad</label>
               <select
                 id="prioridad"
-                [(ngModel)]="nuevaTarea.prioridad"
-                name="prioridad"
+                formControlName="prioridad"
                 class="form-control"
-                required
+                [ngClass]="{ 'is-invalid': tareaForm.get('prioridad')?.invalid && tareaForm.get('prioridad')?.touched }"
               >
-                <option value="" disabled selected>Seleccione una prioridad</option>
+                <option value="" disabled>Seleccione una prioridad</option>
                 <option value="Alta">Alta</option>
                 <option value="Baja">Baja</option>
               </select>
@@ -52,12 +50,11 @@
               <label for="responsable">Responsable</label>
               <select
                 id="responsable"
-                [(ngModel)]="nuevaTarea.responsable"
-                name="responsable"
+                formControlName="responsable"
                 class="form-control"
-                required
+                [ngClass]="{ 'is-invalid': tareaForm.get('responsable')?.invalid && tareaForm.get('responsable')?.touched }"
               >
-                <option value="" disabled selected>Seleccione un responsable</option>
+                <option value="null" disabled>Seleccione un responsable</option>
                 <option *ngFor="let responsable of responsables" [ngValue]="responsable">
                   {{ responsable.nombre }} {{ responsable.apellido }}
                 </option>
@@ -69,12 +66,11 @@
               <label for="estado">Estado</label>
               <select
                 id="estado"
-                [(ngModel)]="nuevaTarea.estado"
-                name="estado"
+                formControlName="estado"
                 class="form-control"
-                required
+                [ngClass]="{ 'is-invalid': tareaForm.get('estado')?.invalid && tareaForm.get('estado')?.touched }"
               >
-                <option value="" disabled selected>Seleccione un estado</option>
+                <option value="" disabled>Seleccione un estado</option>
                 <option value="Nuevo">Nuevo</option>
                 <option value="En progreso">En progreso</option>
                 <option value="Cerrado">Cerrado</option>
@@ -91,12 +87,11 @@
               <label for="proyecto">Proyecto</label>
               <select
                 id="proyecto"
-                [(ngModel)]="nuevaTarea.proyecto"
-                name="proyecto"
+                formControlName="proyecto"
                 class="form-control"
-                required
+                [ngClass]="{ 'is-invalid': tareaForm.get('proyecto')?.invalid && tareaForm.get('proyecto')?.touched }"
               >
-                <option value="" disabled selected>Seleccione un proyecto</option>
+                <option value="null" disabled>Seleccione un proyecto</option>
                 <option *ngFor="let proyecto of proyectos" [ngValue]="proyecto">
                   {{ proyecto.nombre }}
                 </option>
@@ -112,57 +107,57 @@
       </form>
     </div>
   </div>
-  
+
   <div class="container mt-5">
     <!-- Sección de Tareas Registradas -->
     <div class="card registrados p-4 shadow-sm">
       <h2 class="text-center mb-4">Tareas Registradas</h2>
 
       <!-- Filtros -->
-<div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
-  <div class="col-12 d-flex justify-content-center flex-wrap">
-    <div class="px-2 mb-2" style="min-width: 180px;">
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="searchText"
-        placeholder="Buscar por nombre"
-      />
-    </div>
-    <div class="px-2 mb-2" style="min-width: 180px;">
-      <select class="form-control" [(ngModel)]="prioridad">
-        <option value="">Prioridad</option>
-        <option value="Alta">Alta</option>
-        <option value="Baja">Baja</option>
-      </select>
-    </div>
-    <div class="px-2 mb-2" style="min-width: 180px;">
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="responsable"
-        placeholder="Buscar responsable"
-      />
-    </div>
-    <div class="px-2 mb-2" style="min-width: 180px;">
-      <select class="form-control" [(ngModel)]="estado">
-        <option value="">Estado</option>
-        <option value="Nuevo">Nuevo</option>
-        <option value="En progreso">En progreso</option>
-        <option value="Cerrado">Cerrado</option>
-        <option value="Rechazado">Rechazado</option>
-      </select>
-    </div>
-    <div class="px-2 mb-2" style="min-width: 180px;">
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="proyecto"
-        placeholder="Buscar proyecto"
-      />
-    </div>
-  </div>
-</div>
+      <div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
+        <div class="col-12 d-flex justify-content-center flex-wrap">
+          <div class="px-2 mb-2" style="min-width: 180px;">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="searchText"
+              placeholder="Buscar por nombre"
+            />
+          </div>
+          <div class="px-2 mb-2" style="min-width: 180px;">
+            <select class="form-control" [(ngModel)]="prioridad">
+              <option value="">Prioridad</option>
+              <option value="Alta">Alta</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </div>
+          <div class="px-2 mb-2" style="min-width: 180px;">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="responsable"
+              placeholder="Buscar responsable"
+            />
+          </div>
+          <div class="px-2 mb-2" style="min-width: 180px;">
+            <select class="form-control" [(ngModel)]="estado">
+              <option value="">Estado</option>
+              <option value="Nuevo">Nuevo</option>
+              <option value="En progreso">En progreso</option>
+              <option value="Cerrado">Cerrado</option>
+              <option value="Rechazado">Rechazado</option>
+            </select>
+          </div>
+          <div class="px-2 mb-2" style="min-width: 180px;">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="proyecto"
+              placeholder="Buscar proyecto"
+            />
+          </div>
+        </div>
+      </div>
 
       <!-- Tabla -->
       <table class="table table-striped table-bordered">
@@ -181,7 +176,7 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let tarea of tareas | tareaFilter: searchText : prioridad : responsable : estado : proyecto"
+            *ngFor="let tarea of tareas | tareaFilter: searchText : prioridad : responsable : estado : proyecto | paginate: { itemsPerPage: pageSize, currentPage: page }"
           >
             <td>{{ tarea.id }}</td>
             <td>{{ tarea.nombre }}</td>
@@ -203,6 +198,15 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Componente de Paginación -->
+      <pagination-controls
+      (pageChange)="page = $event"
+      [responsive]="true"
+      previousLabel="Anterior"
+      nextLabel="Siguiente"
+      class="d-flex justify-content-center mt-4">
+      </pagination-controls>
     </div>
   </div>
 </body>

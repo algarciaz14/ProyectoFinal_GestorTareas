@@ -2,35 +2,34 @@
   <!-- Contenedor de creación de puestos -->
   <div class="container mt-5">
     <div class="card crear p-4 shadow-sm">
-      <h2 class="mb-4 text-center">{{ nuevoPuesto.id ? 'Editar Puesto' : 'Crear Puesto' }}</h2>
-      <form #puestoForm="ngForm" (ngSubmit)="agregarPuesto(puestoForm)">
+      <h2 class="mb-4 text-center">{{ nuevoPuestoForm.get('id')?.value ? 'Editar Puesto' : 'Crear Puesto' }}</h2>
+      <form [formGroup]="nuevoPuestoForm" (ngSubmit)="agregarPuesto()">
         <!-- Campo de Nombre del Puesto -->
         <div class="form-group">
           <label for="nombre">Nombre del Puesto</label>
           <input
             type="text"
             id="nombre"
-            [(ngModel)]="nuevoPuesto.nombre"
-            name="nombre"
+            formControlName="nombre"
             class="form-control"
             placeholder="Nombre del puesto"
             required
             minlength="4"
             maxlength="30"
-            #nombre="ngModel"
-            [ngClass]="{ 'is-invalid': nombre.touched && nombre.invalid }"
+            [ngClass]="{ 'is-invalid': nuevoPuestoForm.get('nombre')?.touched && nuevoPuestoForm.get('nombre')?.invalid }"
           />
           <!-- Mensajes de error -->
-          <div *ngIf="nombre.touched && nombre.invalid" class="invalid-feedback">
-            <div *ngIf="nombre.errors?.['required']">El nombre del puesto es obligatorio.</div>
-            <div *ngIf="nombre.errors?.['minlength']">El nombre debe tener al menos 4 caracteres.</div>
-            <div *ngIf="nombre.errors?.['maxlength']">El nombre no puede tener más de 30 caracteres.</div>
+          <div *ngIf="nuevoPuestoForm.get('nombre')?.touched && nuevoPuestoForm.get('nombre')?.invalid" class="invalid-feedback">
+            <div *ngIf="nuevoPuestoForm.get('nombre')?.errors?.['required']">El nombre del puesto es obligatorio.</div>
+            <div *ngIf="nuevoPuestoForm.get('nombre')?.errors?.['minlength']">El nombre debe tener al menos 4 caracteres.</div>
+            <div *ngIf="nuevoPuestoForm.get('nombre')?.errors?.['maxlength']">El nombre no puede tener más de 30 caracteres.</div>
+            <div *ngIf="nuevoPuestoForm.get('nombre')?.errors?.['pattern']">El nombre solo puede contener letras y espacios.</div>
           </div>
         </div>
 
         <!-- Botón Guardar/Actualizar -->
-        <button type="submit" class="btn btn-primary btn-block" [disabled]="puestoForm.invalid">
-          {{ nuevoPuesto.id ? 'Actualizar' : 'Guardar' }}
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="nuevoPuestoForm.invalid">
+          {{ nuevoPuestoForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
         </button>
       </form>
     </div>
@@ -66,7 +65,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let puesto of puestos | puestoFilter:searchText">
+          <tr *ngFor="let puesto of puestos | puestoFilter:searchText | paginate: { itemsPerPage: pageSize, currentPage: page }">
             <td>{{ puesto.id }}</td>
             <td>{{ puesto.nombre }}</td>
             <td>
@@ -79,8 +78,18 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> 
+
+      <!-- Componente de Paginación -->
+        <pagination-controls
+        (pageChange)="page = $event"
+        [responsive]="true"
+        previousLabel="Anterior"
+        nextLabel="Siguiente"
+        class="d-flex justify-content-center mt-4">
+      </pagination-controls>
     </div>
   </div>
 </body>
+
 

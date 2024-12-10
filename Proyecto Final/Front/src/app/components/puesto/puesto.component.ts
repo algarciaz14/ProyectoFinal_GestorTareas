@@ -1,21 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importar FormBuilder, FormGroup y Validators
 import { PuestoService } from '../../services/puesto.service';
 import { Puesto } from '../../models/puesto.model';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-puestos',
-  templateUrl: './puesto.component.html',
+  templateUrl: './puesto.component.html', 
   styleUrls: ['./puesto.component.css'],
 })
 export class PuestosComponent implements OnInit {
   puestos: Puesto[] = [];
-  nuevoPuesto: Puesto = new Puesto();
-  // Propiedades de filtro
+  nuevoPuestoForm: FormGroup; // Propiedad del formulario reactivo
   searchText: string = '';
+  // Propiedades para paginación
+  page: number = 1; // Página inicial
+  pageSize: number = 5; // Tamaño de página
+  totalDepartamentos: number = 0; // Total de departamentos
 
-  constructor(private puestoService: PuestoService) {}
+  constructor(
+    private puestoService: PuestoService,
+    private fb: FormBuilder // Inyectar FormBuilder
+  ) {
+    // Inicialización del formulario dentro del constructor
+    this.nuevoPuestoForm = this.fb.group({
+      id: [null],
+      nombre: [
+        '',
+        [Validators.required, 
+          Validators.minLength(4), 
+          Validators.maxLength(50),
+          Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$'),
+        ],
+      ],
+    });
+  }
 
   ngOnInit(): void {
     this.obtenerPuestos();
@@ -38,49 +57,53 @@ export class PuestosComponent implements OnInit {
   }
 
   // Crear o actualizar un puesto
-  agregarPuesto(form: NgForm): void {
-    if (this.nuevoPuesto.id) {
-      // Actualizar puesto existente
-      this.puestoService.updatePuesto(this.nuevoPuesto).subscribe(
-        () => {
-          this.obtenerPuestos();
-          this.resetearFormulario(form);
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'Puesto actualizado correctamente',
-          });
-        },
-        (error) => {
-          console.error('Error al actualizar el puesto:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo actualizar el puesto',
-          });
-        }
-      );
-    } else {
-      // Crear un nuevo puesto
-      this.puestoService.createPuesto(this.nuevoPuesto).subscribe(
-        () => {
-          this.obtenerPuestos();
-          this.resetearFormulario(form);
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'Puesto agregado correctamente',
-          });
-        },
-        (error) => {
-          console.error('Error al agregar el puesto:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo agregar el puesto',
-          });
-        }
-      );
+  agregarPuesto(): void {
+    if (this.nuevoPuestoForm.valid) {
+      const puesto: Puesto = this.nuevoPuestoForm.value;
+      
+      if (puesto.id) {
+        // Actualizar puesto existente
+        this.puestoService.updatePuesto(puesto).subscribe(
+          () => {
+            this.obtenerPuestos();
+            this.resetearFormulario();
+            Swal.fire({
+              icon: 'success',
+              title: 'Éxito',
+              text: 'Puesto actualizado correctamente',
+            });
+          },
+          (error) => {
+            console.error('Error al actualizar el puesto:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo actualizar el puesto',
+            });
+          }
+        );
+      } else {
+        // Crear un nuevo puesto
+        this.puestoService.createPuesto(puesto).subscribe(
+          () => {
+            this.obtenerPuestos();
+            this.resetearFormulario();
+            Swal.fire({
+              icon: 'success',
+              title: 'Éxito',
+              text: 'Puesto agregado correctamente',
+            });
+          },
+          (error) => {
+            console.error('Error al agregar el puesto:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo agregar el puesto',
+            });
+          }
+        );
+      }
     }
   }
 
@@ -118,12 +141,13 @@ export class PuestosComponent implements OnInit {
 
   // Rellenar el formulario para editar un puesto
   updatePuesto(puesto: Puesto): void {
-    this.nuevoPuesto = { ...puesto };
+    this.nuevoPuestoForm.patchValue(puesto);
   }
 
   // Resetear el formulario
-  private resetearFormulario(form?: NgForm): void {
-    this.nuevoPuesto = new Puesto();
-    form?.resetForm(); // Resetea el formulario y los controles
+  private resetearFormulario(): void {
+    this.nuevoPuestoForm.reset();
   }
 }
+
+

@@ -1,9 +1,9 @@
 <body>
-  <!-- Formulario Crear Responsable -->
+  <!-- Formulario Crear/Editar Responsable -->
   <div class="container mt-5">
     <div class="card crear p-4 shadow-sm">
-      <h2 class="mb-4">{{ nuevoResponsable.id ? 'Editar Responsable' : 'Crear Responsable' }}</h2>
-      <form #responsableForm="ngForm" (ngSubmit)="agregarResponsable(responsableForm)">
+      <h2 class="mb-4">{{ responsableForm.get('id')?.value ? 'Editar Responsable' : 'Crear Responsable' }}</h2>
+      <form [formGroup]="responsableForm" (ngSubmit)="agregarResponsable()">
         <!-- Fila 1: Nombre y Apellido -->
         <div class="row mb-3">
           <div class="col-md-6">
@@ -11,40 +11,39 @@
             <input
               type="text"
               id="nombre"
-              [(ngModel)]="nuevoResponsable.nombre"
-              name="nombre"
+              formControlName="nombre"
               class="form-control"
               placeholder="Nombre del responsable"
-              required
-              minlength="3"
-              maxlength="30"
-              #nombre="ngModel"
-              [ngClass]="{ 'is-invalid': nombre.invalid && nombre.touched }"
+              [ngClass]="{ 'is-invalid': responsableForm.get('nombre')?.invalid && responsableForm.get('nombre')?.touched }"
             />
-            <div *ngIf="nombre.invalid && nombre.touched" class="invalid-feedback">
-              El nombre debe tener entre 3 y 30 caracteres.
+            <div *ngIf="responsableForm.get('nombre')?.invalid && responsableForm.get('nombre')?.touched" class="invalid-feedback">
+              <div *ngIf="responsableForm.get('nombre')?.hasError('required')">El nombre es obligatorio.</div>
+              <div *ngIf="responsableForm.get('nombre')?.hasError('minlength')">El nombre debe tener al menos 4 caracteres.</div>
+              <div *ngIf="responsableForm.get('nombre')?.hasError('maxlength')">El nombre no puede exceder los 30 caracteres.</div>
+              <div *ngIf="responsableForm.get('nombre')?.hasError('pattern')">El nombre solo puede contener letras y espacios.</div>
             </div>
           </div>
+          
           <div class="col-md-6">
             <label for="apellido">Apellido</label>
             <input
               type="text"
               id="apellido"
-              [(ngModel)]="nuevoResponsable.apellido"
-              name="apellido"
+              formControlName="apellido"
               class="form-control"
               placeholder="Apellido del responsable"
-              required
-              minlength="3"
-              maxlength="30"
-              #apellido="ngModel"
-              [ngClass]="{ 'is-invalid': apellido.invalid && apellido.touched }"
+              [ngClass]="{ 'is-invalid': responsableForm.get('apellido')?.invalid && responsableForm.get('apellido')?.touched }"
             />
-            <div *ngIf="apellido.invalid && apellido.touched" class="invalid-feedback">
-              El apellido debe tener entre 3 y 30 caracteres.
+            <div *ngIf="responsableForm.get('apellido')?.invalid && responsableForm.get('apellido')?.touched" class="invalid-feedback">
+              <div *ngIf="responsableForm.get('apellido')?.hasError('required')">El apellido es obligatorio.</div>
+              <div *ngIf="responsableForm.get('apellido')?.hasError('minlength')">El apellido debe tener al menos 4 caracteres.</div>
+              <div *ngIf="responsableForm.get('apellido')?.hasError('maxlength')">El apellido no puede exceder los 30 caracteres.</div>
+              <div *ngIf="responsableForm.get('apellido')?.hasError('pattern')">El apellido solo puede contener letras y espacios.</div>
             </div>
           </div>
+          
         </div>
+        
 
         <!-- Fila 2: Correo y Celular -->
         <div class="row mb-3">
@@ -53,15 +52,12 @@
             <input
               type="email"
               id="correo"
-              [(ngModel)]="nuevoResponsable.correo"
-              name="correo"
+              formControlName="correo"
               class="form-control"
               placeholder="example@gmail.com"
-              required
-              #correo="ngModel"
-              [ngClass]="{ 'is-invalid': correo.invalid && correo.touched }"
+              [ngClass]="{ 'is-invalid': responsableForm.get('correo')?.invalid && responsableForm.get('correo')?.touched }"
             />
-            <div *ngIf="correo.invalid && correo.touched" class="invalid-feedback">
+            <div *ngIf="responsableForm.get('correo')?.invalid && responsableForm.get('correo')?.touched" class="invalid-feedback">
               Ingrese un correo válido.
             </div>
           </div>
@@ -70,16 +66,12 @@
             <input
               type="tel"
               id="celular"
-              [(ngModel)]="nuevoResponsable.celular"
-              name="celular"
+              formControlName="celular"
               class="form-control"
               placeholder="Número de 10 dígitos"
-              required
-              pattern="[0-9]{10}"
-              #celular="ngModel"
-              [ngClass]="{ 'is-invalid': celular.invalid && celular.touched }"
+              [ngClass]="{ 'is-invalid': responsableForm.get('celular')?.invalid && responsableForm.get('celular')?.touched }"
             />
-            <div *ngIf="celular.invalid && celular.touched" class="invalid-feedback">
+            <div *ngIf="responsableForm.get('celular')?.invalid && responsableForm.get('celular')?.touched" class="invalid-feedback">
               Ingrese un número de celular válido (10 dígitos).
             </div>
           </div>
@@ -91,19 +83,16 @@
             <label for="departamento">Departamento</label>
             <select
               id="departamento"
-              [(ngModel)]="nuevoResponsable.departamento"
-              name="departamento"
+              formControlName="departamento"
               class="form-control"
-              required
-              #departamento="ngModel"
-              [ngClass]="{ 'is-invalid': departamento.invalid && departamento.touched }"
+              [ngClass]="{ 'is-invalid': responsableForm.get('departamento')?.invalid && responsableForm.get('departamento')?.touched }"
             >
-              <option value="" disabled selected>Seleccione un departamento</option>
+              <option value="null" disabled>Seleccione un departamento</option>
               <option *ngFor="let departamento of departamentos" [ngValue]="departamento">
                 {{ departamento.nombre }}
               </option>
             </select>
-            <div *ngIf="departamento.invalid && departamento.touched" class="invalid-feedback">
+            <div *ngIf="responsableForm.get('departamento')?.invalid && responsableForm.get('departamento')?.touched" class="invalid-feedback">
               Seleccione un departamento.
             </div>
           </div>
@@ -111,19 +100,16 @@
             <label for="puesto">Puesto</label>
             <select
               id="puesto"
-              [(ngModel)]="nuevoResponsable.puesto"
-              name="puesto"
+              formControlName="puesto"
               class="form-control"
-              required
-              #puesto="ngModel"
-              [ngClass]="{ 'is-invalid': puesto.invalid && puesto.touched }"
+              [ngClass]="{ 'is-invalid': responsableForm.get('puesto')?.invalid && responsableForm.get('puesto')?.touched }"
             >
-              <option value="" disabled selected>Seleccione un puesto</option>
+              <option value="null" disabled>Seleccione un puesto</option>
               <option *ngFor="let puesto of puestos" [ngValue]="puesto">
                 {{ puesto.nombre }}
               </option>
             </select>
-            <div *ngIf="puesto.invalid && puesto.touched" class="invalid-feedback">
+            <div *ngIf="responsableForm.get('puesto')?.invalid && responsableForm.get('puesto')?.touched" class="invalid-feedback">
               Seleccione un puesto.
             </div>
           </div>
@@ -131,7 +117,7 @@
 
         <!-- Botón Guardar/Actualizar -->
         <button type="submit" class="btn btn-primary btn-block" [disabled]="responsableForm.invalid">
-          {{ nuevoResponsable.id ? 'Actualizar' : 'Guardar' }}
+          {{ responsableForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
         </button>
       </form>
     </div>
@@ -208,7 +194,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let responsable of responsables | responsableFilter:searchText:apellidoFiltro:correoFiltro:celularFiltro:departamentoFiltro:puestoFiltro">
+          <tr
+            *ngFor="let responsable of responsables | responsableFilter:searchText:apellidoFiltro:correoFiltro:celularFiltro:departamentoFiltro:puestoFiltro | paginate: { itemsPerPage: pageSize, currentPage: page }"
+          >
             <td>{{ responsable.id }}</td>
             <td>{{ responsable.nombre }}</td>
             <td>{{ responsable.apellido }}</td>
@@ -218,11 +206,19 @@
             <td>{{ getDepartamentoNombre(responsable.departamento?.id ?? null) }}</td>
             <td>
               <button (click)="updateResponsable(responsable)" class="btn btn-success btn-sm">Editar</button>
-              <button (click)="eliminarResponsable(responsable.id)" class="btn btn-danger btn-sm">Eliminar</button>
+              <button (click)="eliminarResponsable(responsable.id!)" class="btn btn-danger btn-sm">Eliminar</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <!-- Componente de Paginación -->
+      <pagination-controls
+        (pageChange)="page = $event"
+        [responsive]="true"
+        previousLabel="Anterior"
+        nextLabel="Siguiente"
+        class="d-flex justify-content-center mt-4"
+      ></pagination-controls>
     </div>
-  </div> 
+  </div>
 </body>

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TareaService } from '../../services/tarea.service';
 import { Tarea } from '../../models/tarea.model';
 import { Responsable } from '../../models/responsable.model';
 import { Proyecto } from '../../models/proyecto.model';
 import Swal from 'sweetalert2';
-import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-tareas',
@@ -12,21 +12,34 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./tareas.component.css']
 })
 export class TareasComponent implements OnInit {
-  tareas: Tarea[] = [];
-  responsables: Responsable[] = [];
-  proyectos: Proyecto[] = [];
-  nuevaTarea: Tarea;
-  isEditMode: boolean = false;
+  tareaForm: FormGroup; // Formulario reactivo
+  tareas: Tarea[] = []; //Arrays que almacenan los datos obtenidos del backend.
+  responsables: Responsable[] = [];  //Arrays que almacenan los datos obtenidos del backend.
+  proyectos: Proyecto[] = []; //Arrays que almacenan los datos obtenidos del backend.
+  isEditMode: boolean = false; // Modo edición
 
-  // Filtros
+  // Variables filtros
   searchText: string = '';
   prioridad: string = '';
   responsable: string = '';
   estado: string = '';
   proyecto: string = '';
 
-  constructor(private tareaService: TareaService) {
-    this.nuevaTarea = new Tarea();
+  // Propiedades para paginación
+  page: number = 1; // Página inicial
+  pageSize: number = 5; // Tamaño de página
+  totalDepartamentos: number = 0; // Total de departamentos
+
+  constructor(private fb: FormBuilder, private tareaService: TareaService) {
+    // Inicialización del formulario reactivo
+    this.tareaForm = this.fb.group({
+      id: [null], // Para identificar si se está editando
+      nombre: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]*$')]],
+      prioridad: ['', Validators.required],
+      responsable: [null, Validators.required],
+      estado: ['', Validators.required],
+      proyecto: [null, Validators.required]
+    });
   }
 
   ngOnInit(): void {
@@ -58,24 +71,24 @@ export class TareasComponent implements OnInit {
     });
   }
 
-  agregarTarea(tareaForm: NgForm): void {
-    console.log("Datos de la nueva tarea antes de enviar:", this.nuevaTarea);
-  
-    // Solo enviar los identificadores (responsableId y proyectoId)
+  onSubmit(): void {
+    if (this.tareaForm.invalid) {
+      this.tareaForm.markAllAsTouched(); // Marca todos los controles como tocados
+      return;
+    }
+
+    const formValue = this.tareaForm.value;
     const tareaDto = {
-      ...this.nuevaTarea,
-      proyectoId: this.nuevaTarea.proyecto?.id,
-      responsableId: this.nuevaTarea.responsable?.id
+      ...formValue,
+      proyectoId: formValue.proyecto?.id,
+      responsableId: formValue.responsable?.id
     };
-  
-    console.log("Datos que se envían al servicio:", tareaDto);
-  
-    if (this.nuevaTarea.id) {
-      // Si ya existe la tarea, actualizar
+
+    if (formValue.id) {
+      // Si existe ID, actualizar tarea
       this.tareaService.updateTarea(tareaDto).subscribe(() => {
         this.obtenerTareas();
-        this.nuevaTarea = new Tarea();
-        tareaForm.reset();  
+        this.resetForm();
         Swal.fire({
           title: 'Tarea actualizada',
           text: 'La tarea se ha actualizado correctamente.',
@@ -86,11 +99,10 @@ export class TareasComponent implements OnInit {
         console.error('Error al actualizar la tarea:', error);
       });
     } else {
-      // Si no existe la tarea, crear una nueva
+      // Crear nueva tarea
       this.tareaService.createTarea(tareaDto).subscribe(() => {
         this.obtenerTareas();
-        this.nuevaTarea = new Tarea();
-        tareaForm.reset();  
+        this.resetForm();
         Swal.fire({
           title: 'Tarea creada',
           text: 'La tarea se ha creado correctamente.',
@@ -107,19 +119,18 @@ export class TareasComponent implements OnInit {
     if (id !== undefined && id !== null) {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: "Confirma si deseas eliminar esta tarea.",
+        text: 'Confirma si deseas eliminar esta tarea.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, eliminarla',
-        cancelButtonText: 'No, cancelar',
-        buttonsStyling: true
-      }).then((result) => {
+        cancelButtonText: 'No, cancelar'
+      }).then(result => {
         if (result.isConfirmed) {
           this.tareaService.deleteTarea(id).subscribe(() => {
             this.tareas = this.tareas.filter(tarea => tarea.id !== id);
-            Swal.fire('Tarea eliminada', 'La tarea ha sido eliminada correctamente', 'success');
+            Swal.fire('Tarea eliminada', 'La tarea ha sido eliminada correctamente.', 'success');
           }, error => {
             console.error('Error al eliminar la tarea:', error);
           });
@@ -130,17 +141,22 @@ export class TareasComponent implements OnInit {
 
   updateTarea(tarea: Tarea): void {
     this.isEditMode = true;
-  
+
     const responsable = this.responsables.find(r => r.id === tarea.responsable?.id);
     const proyecto = this.proyectos.find(p => p.id === tarea.proyecto?.id);
-  
-    console.log('Responsable asignado:', responsable);
-    console.log('Proyecto asignado:', proyecto);
-  
-    this.nuevaTarea = {
-      ...tarea,
+
+    this.tareaForm.setValue({
+      id: tarea.id,
+      nombre: tarea.nombre,
+      prioridad: tarea.prioridad,
       responsable: responsable || null,
-      proyecto: proyecto || null,
-    };
+      estado: tarea.estado,
+      proyecto: proyecto || null
+    });
+  }
+
+  resetForm(): void {
+    this.tareaForm.reset();
+    this.isEditMode = false;
   }
 }
