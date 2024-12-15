@@ -11,11 +11,17 @@ import crud_tareas.entity.Departamento;
 import crud_tareas.repository.IDepartamentoRepository;
 
 
-@Service
+@Service 
 public class DepartamentoService {
 	
 	@Autowired
 	private IDepartamentoRepository departamentoRepository;
+	
+	//Filtro
+	public List<Departamento> findByNombre(String nombre) {
+        return departamentoRepository.findByNombreContaining(nombre);
+    }
+	
 	
 	//Consulta de todas los departamentos
 	@Transactional(readOnly = true)

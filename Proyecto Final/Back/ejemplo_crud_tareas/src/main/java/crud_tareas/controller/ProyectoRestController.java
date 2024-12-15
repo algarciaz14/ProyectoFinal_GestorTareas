@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +31,19 @@ public class ProyectoRestController {
 
     @Autowired
     private ProyectoService proyectoService;
+    
+    
+    //Filtro 
+  	@GetMapping("/filterByNombre")
+  	public List<Proyecto> filterByNombre(@RequestParam String nombre) {
+  		return proyectoService.findByNombre(nombre);
+  	 }
+  	
+  //Filtro 
+  	@GetMapping("/filterByDescripcion")
+  	public List<Proyecto> filterByDescripcion(@RequestParam String descripcion) {
+  		return proyectoService.findByDescripcion(descripcion);
+  	 }
 
     //Crear un proyecto
     @PostMapping("/create")
@@ -86,7 +100,7 @@ public class ProyectoRestController {
             response.put("mensaje", "Proyecto eliminado con éxito");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (DataAccessException e) {
-            response.put("mensaje", "Error al eliminar en la base de datos");
+            response.put("mensaje", "No se puede eliminar proyecto, porque ya tiene una tarea asignada");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -23,6 +23,31 @@ public class ResponsableService {
 	 
 	 @Autowired
 	 private DepartamentoService departamentoService; 
+	 
+	//Filtro nombre
+	public List<Responsable> findByNombre(String nombre) {
+		return responsableRepository.findByNombreContaining(nombre);
+	}
+
+	//Filtro apellido
+	public List<Responsable> findByApellido(String apellido) {
+		return responsableRepository.findByApellidoContaining(apellido);
+	}
+		
+	//Filtro correo
+	public List<Responsable> findByCorreo(String correo) {
+		return responsableRepository.findByCorreoContaining(correo);
+	}
+		
+	//Filtro departamento
+	public List<Responsable> findByDepartamento(String departamento) {
+		return responsableRepository.findByDepartamentoContaining(departamento);
+	}
+		
+	//Filtro puesto
+	public List<Responsable> findByPuesto(String puesto) {
+		return responsableRepository.findByPuestoContaining(puesto);
+	}
 	
 	//Consulta de todos los responsables
 	@Transactional(readOnly = true)

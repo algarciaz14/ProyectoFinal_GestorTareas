@@ -17,22 +17,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 
 import crud_tareas.dto.PuestoDto;
-
 import crud_tareas.entity.Puesto;
 import crud_tareas.service.PuestoService;
 
-@CrossOrigin(origins= {"http://localhost:4200"})
+@CrossOrigin(origins= {"http://localhost:4200"}) 
 @RestController
 @RequestMapping("/api/puestos")
 public class PuestoRestController {
 	
 	@Autowired
 	private PuestoService puestoService;
+	
+	//Filtro 
+		@GetMapping("/filterByNombre")
+	    public List<Puesto> filterByNombre(@RequestParam String nombre) {
+	        return puestoService.findByNombre(nombre);
+	    }
 	
 	//Crear un puesto
 	@PostMapping("/create")
@@ -98,7 +104,7 @@ public class PuestoRestController {
 			
 			puestoService.delete(id);
 		} catch (DataAccessException e) { 
-			response.put("mensaje", "Error al eliminar en base de datos");
+			response.put("mensaje", "No se puede eliminar el puesto, porque ya tiene un Responsable asignado");
 			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

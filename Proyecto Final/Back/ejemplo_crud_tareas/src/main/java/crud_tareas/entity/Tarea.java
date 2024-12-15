@@ -35,10 +35,7 @@ public class Tarea {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Responsable responsable; // Relación con Responsable
 
-	
-	
-	
-    public Responsable getResponsable() {
+	public Responsable getResponsable() {
 		return responsable;
 	}
 	// Relación Many-to-One con Proyecto

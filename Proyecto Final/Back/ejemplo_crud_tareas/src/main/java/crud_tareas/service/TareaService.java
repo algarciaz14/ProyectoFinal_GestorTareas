@@ -28,11 +28,36 @@ public class TareaService {
 	@Autowired
 	private ProyectoService proyectoService; 
 	
-
-
 	public List<Tarea> findAllWithResponsable() {
 	    return tareaRepository.findAllWithResponsable();
 	}
+
+	//Filtro nombre
+	public List<Tarea> findByNombre(String nombre) {
+		return tareaRepository.findByNombreContaining(nombre);
+	}
+	
+	//Filtro prioridad
+	public List<Tarea> findByPrioridad(String prioridad) {
+		return tareaRepository.findByPrioridadContaining(prioridad);
+	}
+		
+	//Filtro estado
+	public List<Tarea> findByEstado(String estado) {
+		return tareaRepository.findByEstadoContaining(estado);
+	}
+		
+	//Filtro responsable
+	public List<Tarea> findByResponsable(String responsable) {
+		return tareaRepository.findByResponsableContaining(responsable);
+	}
+		
+	//Filtro proyecto
+	public List<Tarea> findByProyecto(String proyecto) {
+		return tareaRepository.findByProyectoContaining(proyecto);
+	}
+		
+		
 
 	
 	//Consulta de todas las tareas

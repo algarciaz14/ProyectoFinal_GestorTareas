@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +32,12 @@ public class DepartamentoRestController {
 	
 	@Autowired
 	private DepartamentoService departamentoService;
+	
+	//Filtro
+	@GetMapping("/filterByNombre")
+    public List<Departamento> filterByNombre(@RequestParam String nombre) {
+        return departamentoService.findByNombre(nombre);
+    }
 	
 	//Crear un departamento
 	@PostMapping("/create")
@@ -97,7 +104,7 @@ public class DepartamentoRestController {
 			
 			departamentoService.delete(id);
 		} catch (DataAccessException e) { 
-			response.put("mensaje", "Error al eliminar en base de datos");
+			response.put("mensaje", "No se puede eliminar el departamento, porque ya tiene un responsable asignado");
 			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

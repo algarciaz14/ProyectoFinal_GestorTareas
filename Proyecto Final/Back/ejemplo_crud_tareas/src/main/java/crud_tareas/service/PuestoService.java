@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import crud_tareas.dto.PuestoDto;
+import crud_tareas.dto.PuestoDto; 
 import crud_tareas.entity.Puesto;
 import crud_tareas.repository.IPuestoRepository;
 
@@ -15,6 +15,11 @@ public class PuestoService {
 	
 	@Autowired
 	private IPuestoRepository puestoRepository;
+	
+	//Filtro
+		public List<Puesto> findByNombre(String nombre) {
+	        return puestoRepository.findByNombreContaining(nombre);
+	    }
 	
 	//Consulta de todos los puestos
 	@Transactional(readOnly = true)

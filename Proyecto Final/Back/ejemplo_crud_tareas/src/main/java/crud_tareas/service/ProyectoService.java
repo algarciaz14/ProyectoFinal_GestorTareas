@@ -17,6 +17,17 @@ public class ProyectoService {
 	@Autowired
 	private IProyectoRepository proyectoRepository;
 	
+	//Filtro nombre
+	public List<Proyecto> findByNombre(String nombre) {
+		return proyectoRepository.findByNombreContaining(nombre);
+	}
+	
+	//Filtro descripcion
+	public List<Proyecto> findByDescripcion(String descripcion) {
+		return proyectoRepository.findByDescripcionContaining(descripcion);
+	}
+		
+	
 	//Consulta de todos los proyectos
 	@Transactional(readOnly = true)
 	public List<Proyecto> findAll(){

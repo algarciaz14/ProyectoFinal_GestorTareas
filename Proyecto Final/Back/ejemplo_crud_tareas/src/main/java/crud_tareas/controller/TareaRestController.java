@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +43,36 @@ public class TareaRestController {
 
     @Autowired
     private ResponsableService responsableService;
+    
+  //Filtro por nombre 
+  	@GetMapping("/filterByNombre")
+  	public List<Tarea> filterByNombre(@RequestParam String nombre) {
+  		return tareaService.findByNombre(nombre);
+  	 }
+  	
+  //Filtro por prioridad 
+  	@GetMapping("/filterByPrioridad")
+  	public List<Tarea> filterByPrioridad(@RequestParam String prioridad) {
+  		return tareaService.findByPrioridad(prioridad);
+  	 }
+  	
+  //Filtro por estado 
+  	@GetMapping("/filterByEstado")
+  	public List<Tarea> filterByEstado(@RequestParam String estado) {
+  		return tareaService.findByEstado(estado);
+  	 }
+  	
+  //Filtro por responsable 
+  	@GetMapping("/filterByResponsable")
+  	public List<Tarea> filterByResponsable(@RequestParam String responsable) {
+  		return tareaService.findByResponsable(responsable);
+  	 }
+  	
+  //Filtro por proyecto 
+  	@GetMapping("/filterByProyecto")
+  	public List<Tarea> filterByProyecto(@RequestParam String proyecto) {
+  		return tareaService.findByProyecto(proyecto);
+  	 }
 
    // Crear una nueva tarea
     @PostMapping("/create")

@@ -23,6 +23,38 @@ public class ResponsableRestController {
 
     @Autowired
     private ResponsableService responsableService;
+    
+  //Filtro por nombre 
+  	@GetMapping("/filterByNombre")
+  	public List<Responsable> filterByNombre(@RequestParam String nombre) {
+  		return responsableService.findByNombre(nombre);
+  	 }
+  	
+  //Filtro por Apellido
+  	@GetMapping("/filterByApellido")
+  	public List<Responsable> filterByApellido(@RequestParam String apellido) {
+  		return responsableService.findByApellido(apellido);
+  	 }
+  	
+  //Filtro por correo
+  	@GetMapping("/filterByCorreo")
+  	public List<Responsable> filterByCorreo(@RequestParam String correo) {
+  		return responsableService.findByCorreo(correo);
+  	 }
+  	
+  //Filtro por departamento
+  	@GetMapping("/filterByDepartamento")
+  	public List<Responsable> filterByDepartamento(@RequestParam String departamento) {
+  		return responsableService.findByDepartamento(departamento);
+  	 }
+  	
+  //Filtro por puesto
+  	@GetMapping("/filterByPuesto")
+  	public List<Responsable> filterByPuesto(@RequestParam String puesto) {
+  		return responsableService.findByPuesto(puesto);
+  	 }
+  	
+ 
 
     //Crear un responsable
     @PostMapping("/create")
@@ -95,7 +127,7 @@ public class ResponsableRestController {
             response.put("mensaje", "Responsable eliminado con éxito");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (DataAccessException e) {
-            response.put("mensaje", "Error al eliminar en la base de datos");
+            response.put("mensaje", "No se puede eliminar responsable, porque ya tiene una Tarea asignada");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getLocalizedMessage()));
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
