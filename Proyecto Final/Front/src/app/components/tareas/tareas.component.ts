@@ -5,6 +5,8 @@ import { Tarea } from '../../models/tarea.model';
 import { Responsable } from '../../models/responsable.model';
 import { Proyecto } from '../../models/proyecto.model';
 import Swal from 'sweetalert2';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-tareas',
@@ -20,10 +22,15 @@ export class TareasComponent implements OnInit {
 
   // Variables filtros
   searchText: string = '';
-  prioridad: string = '';
-  responsable: string = '';
-  estado: string = '';
-  proyecto: string = '';
+    searchPrioridad: string = '';
+    searchEstado: string = '';
+    searchResponsable: string = '';
+    searchProyecto: string = '';
+
+  puestoEnEdicion: Tarea| null = null;
+    isEditing: boolean = false;
+    orderBy: keyof Tarea = 'id'; 
+    orderDirection: 'asc' | 'desc' = 'asc'; 
 
   // Propiedades para paginación
   page: number = 1; // Página inicial
@@ -159,4 +166,186 @@ export class TareasComponent implements OnInit {
     this.tareaForm.reset();
     this.isEditMode = false;
   }
+
+  buscarTareasPorNombre(nombre: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (nombre.trim() === '') {
+      this.obtenerTareas(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.tareaService.getTareasByNombre(nombre).subscribe(
+        (tareas) => {
+          this.tareas = tareas; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.tareas.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron tareas que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener las tareas.',
+          });
+        }
+      );
+    }
+  }
+
+
+  buscarTareasPorPrioridad(prioridad: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (prioridad.trim() === '') {
+      this.obtenerTareas(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.tareaService.getTareasByPrioridad(prioridad).subscribe(
+        (tareas) => {
+          this.tareas = tareas; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.tareas.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron tareas que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener las tareas.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+
+  buscarTareasPorEstado(estado: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (estado.trim() === '') {
+      this.obtenerTareas(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.tareaService.getTareasByEstado(estado).subscribe(
+        (tareas) => {
+          this.tareas = tareas; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.tareas.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron tareas que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener las tareas.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+
+  buscarTareasPorResponsable(responsable: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (responsable.trim() === '') {
+      this.obtenerTareas(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.tareaService.getTareasByResponsable(responsable).subscribe(
+        (tareas) => {
+          this.tareas = tareas; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.tareas.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron tareas que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener las tareas.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+  buscarTareasPorProyecto(proyecto: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (proyecto.trim() === '') {
+      this.obtenerTareas(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.tareaService.getTareasByProyecto(proyecto).subscribe(
+        (tareas) => {
+          this.tareas = tareas; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.tareas.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron tareas que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener las tareas.',
+          });
+        }
+      );
+    }
+  }
+
+  
+
+  cambiarOrden(campo: keyof Tarea): void {
+    // Si ya estamos ordenando por el mismo campo, solo cambia la dirección
+    if (this.orderBy === campo) {
+      this.orderDirection = this.orderDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Si estamos cambiando el campo de ordenación, establecemos 'ascendente' como predeterminado
+      this.orderBy = campo;
+      this.orderDirection = 'asc';
+    }
+  }
+
+  exportarPDF(): void {
+    const doc = new jsPDF();
+    const table = document.getElementById('tablaTareas'); // Usar el id de la tabla
+    
+    if (!table) {
+      console.error('Tabla no encontrada');
+      return;
+    }
+  
+    // Generar la captura de la tabla con html2canvas
+    html2canvas(table).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png'); // Convertir el canvas a imagen
+  
+      // Obtener las dimensiones del canvas
+      const imgWidth = canvas.width * 0.75; // Ajustar el tamaño de la imagen según el ancho
+      const imgHeight = canvas.height * 0.75; // Ajustar el tamaño de la imagen según el alto
+  
+      // Agregar la imagen al PDF con la posición y dimensiones correctas
+      doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight); // Agregar la imagen al PDF
+      doc.save('tareas.pdf'); // Guardar el PDF
+    }).catch(err => {
+      console.error('Error al generar el PDF:', err);
+    });
+  } 
 }

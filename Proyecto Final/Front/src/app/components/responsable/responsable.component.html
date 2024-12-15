@@ -23,7 +23,6 @@
               <div *ngIf="responsableForm.get('nombre')?.hasError('pattern')">El nombre solo puede contener letras y espacios.</div>
             </div>
           </div>
-          
           <div class="col-md-6">
             <label for="apellido">Apellido</label>
             <input
@@ -41,10 +40,7 @@
               <div *ngIf="responsableForm.get('apellido')?.hasError('pattern')">El apellido solo puede contener letras y espacios.</div>
             </div>
           </div>
-          
         </div>
-        
-
         <!-- Fila 2: Correo y Celular -->
         <div class="row mb-3">
           <div class="col-md-6">
@@ -76,7 +72,6 @@
             </div>
           </div>
         </div>
-
         <!-- Fila 3: Departamento y Puesto -->
         <div class="row mb-3">
           <div class="col-md-6">
@@ -114,7 +109,6 @@
             </div>
           </div>
         </div>
-
         <!-- Botón Guardar/Actualizar -->
         <button type="submit" class="btn btn-primary btn-block" [disabled]="responsableForm.invalid">
           {{ responsableForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
@@ -122,69 +116,86 @@
       </form>
     </div>
   </div>
-
   <!-- Tabla de Responsables -->
   <div class="container mt-5">
     <div class="card registrados p-4 shadow-sm">
       <h2 class="mb-4">Responsables Registrados</h2>
-
-      <!-- Filtros dentro de la tabla -->
-      <div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
-        <div class="col-12 d-flex justify-content-center flex-wrap">
-          <!-- Filtro por Nombre -->
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="searchText"
-              placeholder="Buscar por nombre"
-            />
-          </div>
-          <!-- Filtro por Apellido -->
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="apellidoFiltro"
-              placeholder="Buscar por apellido"
-            />
-          </div>
-          <!-- Filtro por Correo -->
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <input
-              type="email"
-              class="form-control"
-              [(ngModel)]="correoFiltro"
-              placeholder="Buscar por correo"
-            />
-          </div>
-          <!-- Filtro por Departamento -->
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <select class="form-control" [(ngModel)]="departamentoFiltro">
-              <option value="">Filtrar por Departamento</option>
-              <option *ngFor="let departamento of departamentos" [value]="departamento.nombre">
-                {{ departamento.nombre }}
-              </option>
-            </select>
-          </div>
-          <!-- Filtro por Puesto -->
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <select class="form-control" [(ngModel)]="puestoFiltro">
-              <option value="">Filtrar por Puesto</option>
-              <option *ngFor="let puesto of puestos" [value]="puesto.nombre">
-                {{ puesto.nombre }}
-              </option>
-            </select>
-          </div>
+      <div class="row mb-4 py-3 justify-content-start align-items-center" style="background-color: #eaf4fc; border-radius: 8px;">
+        <div class="col-md-6 px-3">
+          <label for="ordenarPor">Ordenar por</label>
+          <select class="form-control" id="ordenarPor" [(ngModel)]="orderBy" (change)="cambiarOrden(orderBy)">
+            <option value="id">ID</option>
+            <option value="nombre">Nombre</option>
+          </select>
+        </div>
+        <div class="col-md-6 px-3">
+          <label for="direccionOrden">Dirección</label>
+          <select class="form-control" id="direccionOrden" [(ngModel)]="orderDirection">
+            <option value="asc">Ascendente</option>
+            <option value="desc">Descendente</option>
+          </select>
         </div>
       </div>
 
+      <div class="row mb-4 py-3 justify-content-center" style="background-color: #eaf4fc; border-radius: 8px;">
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchText"
+            (input)="buscarResponsablesPorNombre(searchText)"
+            placeholder="Buscar por nombre"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchApellido"
+            (input)="buscarResponsablesPorApellido(searchApellido)"
+            placeholder="Buscar por apellido"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchCorreo"
+            (input)="buscarResponsablesPorCorreo(searchCorreo)"
+            placeholder="Buscar por correo"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchDepartamento"
+            (input)="buscarResponsablesPorDepartamento(searchDepartamento)"
+            placeholder="Buscar por departamento"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchPuesto"
+            (input)="buscarResponsablesPorPuesto(searchPuesto)"
+            placeholder="Buscar por puesto"
+          />
+        </div>
+      </div>
+      
+      
       <!-- Tabla de Responsables -->
-      <table class="table table-striped table-bordered">
+      <table class="table table-striped table-bordered" id="tablaResponsables">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nombre</th>
+            <th>Nombre Responsable
+              <button (click)="cambiarOrden('nombre')" class="btn btn-link">
+                <i class="fas" [ngClass]="orderDirection === 'asc' ? 'fa-sort-amount-down' : 'fa-sort-amount-up'"></i>
+              </button>
+            </th>
             <th>Apellido</th>
             <th>Correo</th>
             <th>Celular</th>
@@ -194,9 +205,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let responsable of responsables | responsableFilter:searchText:apellidoFiltro:correoFiltro:celularFiltro:departamentoFiltro:puestoFiltro | paginate: { itemsPerPage: pageSize, currentPage: page }"
-          >
+          <tr *ngFor="let responsable of responsables | responsableOrder: searchText : searchApellido : searchCorreo : searchDepartamento : searchPuesto : orderBy : orderDirection | paginate: { itemsPerPage: pageSize, currentPage: page }" class="align-middle">
             <td>{{ responsable.id }}</td>
             <td>{{ responsable.nombre }}</td>
             <td>{{ responsable.apellido }}</td>
@@ -217,8 +226,13 @@
         [responsive]="true"
         previousLabel="Anterior"
         nextLabel="Siguiente"
-        class="d-flex justify-content-center mt-4"
-      ></pagination-controls>
+        class="d-flex justify-content-center mt-4">
+      </pagination-controls>
+      <div class="text-center mt-4">
+        <button class="btn btn-info" (click)="exportarPDF()">
+          Exportar a PDF
+        </button>
+      </div>
     </div>
   </div>
 </body>

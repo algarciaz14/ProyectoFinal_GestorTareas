@@ -19,10 +19,10 @@
               />
               <!-- Mensajes de error -->
               <div *ngIf="tareaForm.get('nombre')?.invalid && tareaForm.get('nombre')?.touched" class="invalid-feedback">
-              <div *ngIf="tareaForm.get('nombre')?.hasError('required')">El nombre es obligatorio.</div>
-              <div *ngIf="tareaForm.get('nombre')?.hasError('minlength')">El nombre debe tener al menos 4 caracteres.</div>
-              <div *ngIf="tareaForm.get('nombre')?.hasError('maxlength')">El nombre no puede exceder 30 caracteres.</div>
-              <div *ngIf="tareaForm.get('nombre')?.hasError('pattern')">El nombre no puede contener números ni caracteres especiales.</div>
+                <div *ngIf="tareaForm.get('nombre')?.hasError('required')">El nombre es obligatorio.</div>
+                <div *ngIf="tareaForm.get('nombre')?.hasError('minlength')">El nombre debe tener al menos 4 caracteres.</div>
+                <div *ngIf="tareaForm.get('nombre')?.hasError('maxlength')">El nombre no puede exceder 30 caracteres.</div>
+                <div *ngIf="tareaForm.get('nombre')?.hasError('pattern')">El nombre no puede contener números ni caracteres especiales.</div>
               </div>
             </div>
           </div>
@@ -108,63 +108,81 @@
     </div>
   </div>
 
+  <!-- Tabla de Responsables -->
   <div class="container mt-5">
-    <!-- Sección de Tareas Registradas -->
     <div class="card registrados p-4 shadow-sm">
-      <h2 class="text-center mb-4">Tareas Registradas</h2>
+      <h2 class="mb-4">Tareas Registradas</h2>
+      <div class="row mb-4 py-3 justify-content-start align-items-center" style="background-color: #eaf4fc; border-radius: 8px;">
+        <div class="col-md-6 px-3">
+          <label for="ordenarPor">Ordenar por</label>
+          <select class="form-control" id="ordenarPor" [(ngModel)]="orderBy" (change)="cambiarOrden(orderBy)">
+            <option value="id">ID</option>
+            <option value="nombre">Nombre</option>
+          </select>
+        </div>
+        <div class="col-md-6 px-3">
+          <label for="direccionOrden">Dirección</label>
+          <select class="form-control" id="direccionOrden" [(ngModel)]="orderDirection">
+            <option value="asc">Ascendente</option>
+            <option value="desc">Descendente</option>
+          </select>
+        </div>
+      </div>
 
-      <!-- Filtros -->
-      <div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
-        <div class="col-12 d-flex justify-content-center flex-wrap">
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="searchText"
-              placeholder="Buscar por nombre"
-            />
-          </div>
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <select class="form-control" [(ngModel)]="prioridad">
-              <option value="">Prioridad</option>
-              <option value="Alta">Alta</option>
-              <option value="Baja">Baja</option>
-            </select>
-          </div>
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="responsable"
-              placeholder="Buscar responsable"
-            />
-          </div>
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <select class="form-control" [(ngModel)]="estado">
-              <option value="">Estado</option>
-              <option value="Nuevo">Nuevo</option>
-              <option value="En progreso">En progreso</option>
-              <option value="Cerrado">Cerrado</option>
-              <option value="Rechazado">Rechazado</option>
-            </select>
-          </div>
-          <div class="px-2 mb-2" style="min-width: 180px;">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="proyecto"
-              placeholder="Buscar proyecto"
-            />
-          </div>
+      <div class="row mb-4 py-3 justify-content-center" style="background-color: #eaf4fc; border-radius: 8px;">
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchText"
+            (input)="buscarTareasPorNombre(searchText)"
+            placeholder="Buscar por nombre"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchPrioridad"
+            (input)="buscarTareasPorPrioridad(searchPrioridad)"
+            placeholder="Buscar por prioridad"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchEstado"
+            (input)="buscarTareasPorEstado(searchEstado)"
+            placeholder="Buscar por estado"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchResponsable"
+            (input)="buscarTareasPorResponsable(searchResponsable)"
+            placeholder="Buscar por responsable"
+          />
+        </div>
+        <div class="col-md-2 px-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchProyecto"
+            (input)="buscarTareasPorProyecto(searchProyecto)"
+            placeholder="Buscar por proyecto"
+          />
         </div>
       </div>
 
       <!-- Tabla -->
-      <table class="table table-striped table-bordered">
+      <table class="table table-striped table-bordered" id="tablaTareas">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nombre</th>
+            <th>Nombre Tarea</th>
             <th>Prioridad</th>
             <th>Responsable</th>
             <th>Estado</th>
@@ -175,9 +193,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let tarea of tareas | tareaFilter: searchText : prioridad : responsable : estado : proyecto | paginate: { itemsPerPage: pageSize, currentPage: page }"
-          >
+          <tr *ngFor="let tarea of tareas | tareaOrder: searchText : searchPrioridad : searchEstado : searchResponsable: searchProyecto : orderBy : orderDirection | paginate: { itemsPerPage: pageSize, currentPage: page }" class="align-middle">
             <td>{{ tarea.id }}</td>
             <td>{{ tarea.nombre }}</td>
             <td>{{ tarea.prioridad }}</td>
@@ -201,12 +217,17 @@
 
       <!-- Componente de Paginación -->
       <pagination-controls
-      (pageChange)="page = $event"
-      [responsive]="true"
-      previousLabel="Anterior"
-      nextLabel="Siguiente"
-      class="d-flex justify-content-center mt-4">
+        (pageChange)="page = $event"
+        [responsive]="true"
+        previousLabel="Anterior"
+        nextLabel="Siguiente"
+        class="d-flex justify-content-center mt-4">
       </pagination-controls>
+      <div class="text-center mt-4">
+        <button class="btn btn-info" (click)="exportarPDF()">
+          Exportar a PDF
+        </button>
+      </div>
     </div>
   </div>
 </body>

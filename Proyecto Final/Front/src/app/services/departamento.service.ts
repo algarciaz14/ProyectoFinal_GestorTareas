@@ -36,4 +36,11 @@ export class DepartamentoService {
   deleteDepartamento(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.httpHeaders });
   }
+ 
+  //Filtro
+  getDepartamentosByNombre(nombre: string): Observable<Departamento[]> {
+    return this.http.get<Departamento[]>(`${this.apiUrl}/filterByNombre`, {
+      params: { nombre },
+    });
+  }
 }

@@ -2,33 +2,39 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Proyecto } from '../models/proyecto.model';
 
 @Pipe({
-  name: 'proyectoFilter'
+  name: 'proyectoOrder',
 })
-export class ProyectoFilterPipe implements PipeTransform {
-
+export class ProyectoOrderPipe implements PipeTransform {
   transform(
-    proyectos: Proyecto[], 
-    nombre: string,
-    descripcion: string,
+    proyectos: Proyecto[],
+    searchText: string = '',
+    searchDescripcion: string = '',
+    orderBy: keyof Proyecto = 'id',
+    orderDirection: 'asc' | 'desc' = 'asc'
   ): Proyecto[] {
-    if (!proyectos) return [];
-    if (!nombre && !descripcion) return proyectos;
+    if (!proyectos || !orderBy) return proyectos; 
 
-    let filteredProyectos = proyectos;
+    // Filtrar por nombre y descripción
+    const filteredProyectos = proyectos.filter(proyecto =>
+      proyecto.nombre.toLowerCase().includes(searchText.toLowerCase()) &&
+      proyecto.descripcion.toLowerCase().includes(searchDescripcion.toLowerCase())
+    );
 
-    // Filtrar por nombre
-    if (nombre) {
-      filteredProyectos = filteredProyectos.filter(proyecto =>
-        proyecto.nombre.toLowerCase().includes(nombre.toLowerCase())
-      );
-    }
+    return filteredProyectos.sort((a, b) => {
+      const valueA = a[orderBy];
+      const valueB = b[orderBy];
 
-    // Filtrar por descripcion
-    if (descripcion) {
-      filteredProyectos = filteredProyectos.filter(proyecto =>
-        proyecto.descripcion.toLowerCase().includes(descripcion.toLowerCase())  // Corrección aquí
-      );
-    }
-    return filteredProyectos;
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return orderDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return orderDirection === 'asc'
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
+      }
+
+      return 0;
+    });
   }
 }

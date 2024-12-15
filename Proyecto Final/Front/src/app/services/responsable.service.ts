@@ -56,4 +56,39 @@ export class ResponsableService {
   getDepartamentos(): Observable<Departamento[]> {
     return this.http.get<any[]>('http://localhost:8080/api/departamentos');
   }
+
+  //Filtro para nombre
+    getResponsablesByNombre(nombre: string): Observable<Responsable[]> {
+      return this.http.get<Responsable[]>(`${this.apiUrl}/filterByNombre`, {
+        params: { nombre },
+      });
+    }
+  
+  //Filtro para apellido
+  getResponsablesByApellido(apellido: string): Observable<Responsable[]> {
+    return this.http.get<Responsable[]>(`${this.apiUrl}/filterByApellido`, {
+      params: { apellido },
+    });
+  }
+
+  //Filtro para correo
+  getResponsablesByCorreo(correo: string): Observable<Responsable[]> {
+    return this.http.get<Responsable[]>(`${this.apiUrl}/filterByCorreo`, {
+      params: { correo },
+    });
+  }
+
+  //Filtro para departamento
+  getResponsablesByDepartamento(departamento: string): Observable<Responsable[]> {
+    return this.http.get<Responsable[]>(`${this.apiUrl}/filterByDepartamento`, {
+      params: { departamento },
+    });
+  }
+
+  //Filtro para puesto
+  getResponsablesByPuesto(puesto: string): Observable<Responsable[]> {
+    return this.http.get<Responsable[]>(`${this.apiUrl}/filterByPuesto`, {
+      params: { puesto },
+    });
+  }
 }

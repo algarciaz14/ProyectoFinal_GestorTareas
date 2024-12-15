@@ -13,11 +13,11 @@ import { ResponsablesComponent } from './components/responsable/responsable.comp
 
 import { TareasComponent } from './components/tareas/tareas.component';
 import { InicioComponent } from './components/inicio/inicio.component';
-import { TareaFilterPipe } from './filters/tarea-filter.pipe';
-import { ResponsableFilterPipe } from './filters/responsable-filter.pipe';
-import { ProyectoFilterPipe } from './filters/proyecto-filter.pipe';
-import { PuestoFilterPipe } from './filters/puesto-filter.pipe';
-import { DepartamentoFilterPipe } from './filters/departamento-filter.pipe';
+import { TareaOrderPipe } from './filters/tarea-filter.pipe';
+import { ResponsableOrderPipe } from './filters/responsable-filter.pipe';
+import { ProyectoOrderPipe } from './filters/proyecto-filter.pipe';
+import { PuestoOrderPipe } from './filters/puesto-filter.pipe';
+import { DepartamentoOrderPipe } from './filters/departamento-filter.pipe';
 import { BusquedaGeneralPipe } from './filters/busqueda-general.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -30,11 +30,11 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ResponsablesComponent,
     TareasComponent,
     InicioComponent,
-    TareaFilterPipe,
-    ResponsableFilterPipe,
-    ProyectoFilterPipe,
-    PuestoFilterPipe,
-    DepartamentoFilterPipe,
+    TareaOrderPipe,
+    ResponsableOrderPipe,
+    ProyectoOrderPipe,
+    PuestoOrderPipe,
+    DepartamentoOrderPipe,
     BusquedaGeneralPipe 
   ],
   imports: [

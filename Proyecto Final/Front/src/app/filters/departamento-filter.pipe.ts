@@ -1,29 +1,36 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Departamento } from '../models/departamento.model';
 
+
 @Pipe({
-  name: 'departamentoFilter'
+  name: 'departamentoOrder',
 })
-export class DepartamentoFilterPipe implements PipeTransform {
-
+export class DepartamentoOrderPipe implements PipeTransform {
   transform(
-    departamentos: Departamento[], 
-    nombre: string,
-    
+    departamentos: Departamento[],
+    orderBy: keyof Departamento = 'id',
+    orderDirection: 'asc' | 'desc' = 'asc'
   ): Departamento[] {
-    if (!departamentos) return [];
-    if (!nombre) return departamentos;
+    if (!departamentos || !orderBy) return departamentos;
 
-    let filteredDepartamentos = departamentos;
+    return departamentos.sort((a, b) => {
+      const valueA = a[orderBy];
+      const valueB = b[orderBy];
 
-    // Filtrar por nombre
-    if (nombre) {
-      filteredDepartamentos = filteredDepartamentos.filter(departamento =>
-        departamento.nombre.toLowerCase().includes(nombre.toLowerCase())
-      );
-    }
+      // Si el valor es un número, asegura la comparación correcta
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return orderDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
 
-    return filteredDepartamentos;
+      // Para cadenas, usa .localeCompare para una comparación más precisa
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return orderDirection === 'asc' 
+          ? valueA.localeCompare(valueB) 
+          : valueB.localeCompare(valueA);
+      }
+
+      // Si no es de tipo numérico ni string, se pueden comparar como cadenas vacías
+      return 0;
+    });
   }
-
 }

@@ -5,6 +5,8 @@ import { Responsable } from '../../models/responsable.model';
 import { DepartamentoService } from '../../services/departamento.service';
 import { PuestoService } from '../../services/puesto.service';
 import Swal from 'sweetalert2';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-responsables',
@@ -20,15 +22,20 @@ export class ResponsablesComponent implements OnInit {
 
   // Propiedades de filtro
   searchText: string = '';
-  apellidoFiltro: string = '';
-  correoFiltro: string = '';
-  celularFiltro: string = '';
-  departamentoFiltro: string = '';
-  puestoFiltro: string = '';
+  searchApellido: string = '';
+  searchCorreo: string = '';
+  searchDepartamento: string = '';
+  searchPuesto: string = '';
+
+  puestoEnEdicion: Responsable| null = null;
+      isEditing: boolean = false;
+      orderBy: keyof Responsable = 'id'; 
+      orderDirection: 'asc' | 'desc' = 'asc'; 
 
   // Propiedades para paginación
   page: number = 1;
   pageSize: number = 5;
+  totalResponsables: number = 0; // Total de departamentos
 
   constructor(
     private fb: FormBuilder,
@@ -176,5 +183,186 @@ export class ResponsablesComponent implements OnInit {
     const departamento = this.departamentos.find((d) => d.id === id);
     return departamento ? departamento.nombre : 'Sin asignar';
   }
+
+  buscarResponsablesPorNombre(nombre: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (nombre.trim() === '') {
+      this.obtenerResponsables(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.responsableService.getResponsablesByNombre(nombre).subscribe(
+        (responsables) => {
+          this.responsables = responsables; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.responsables.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron responsables que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener los responsables.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+  buscarResponsablesPorApellido(apellido: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (apellido.trim() === '') {
+      this.obtenerResponsables(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.responsableService.getResponsablesByApellido(apellido).subscribe(
+        (responsables) => {
+          this.responsables = responsables; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.responsables.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron responsables que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener los responsables.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+
+  buscarResponsablesPorCorreo(correo: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (correo.trim() === '') {
+      this.obtenerResponsables(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.responsableService.getResponsablesByCorreo(correo).subscribe(
+        (responsables) => {
+          this.responsables = responsables; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.responsables.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron responsables que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener los responsables.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+  buscarResponsablesPorDepartamento(departamento: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (departamento.trim() === '') {
+      this.obtenerResponsables(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.responsableService.getResponsablesByDepartamento(departamento).subscribe(
+        (responsables) => {
+          this.responsables = responsables; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.responsables.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron responsables que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener los responsables.',
+          });
+        }
+      );
+    }
+  }
+
+
+
+  buscarResponsablesPorPuesto(puesto: string): void {
+    this.page = 1; // Reinicia la página a la primera
+    if (puesto.trim() === '') {
+      this.obtenerResponsables(); // Si no hay texto de búsqueda, obtiene todos los departamentos
+    } else {
+      this.responsableService.getResponsablesByPuesto(puesto).subscribe(
+        (responsables) => {
+          this.responsables = responsables; // Aquí se actualiza con los departamentos filtrados desde el backend
+          if (this.responsables.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: 'No se encontraron responsables que coincidan con la búsqueda.',
+            });
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener los responsables.',
+          });
+        }
+      );
+    }
+  }
+
+  
+
+  cambiarOrden(campo: keyof Responsable): void {
+    // Si ya estamos ordenando por el mismo campo, solo cambia la dirección
+    if (this.orderBy === campo) {
+      this.orderDirection = this.orderDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Si estamos cambiando el campo de ordenación, establecemos 'ascendente' como predeterminado
+      this.orderBy = campo;
+      this.orderDirection = 'asc';
+    }
+  }
+
+  exportarPDF(): void {
+    const doc = new jsPDF();
+    const table = document.getElementById('tablaResponsables'); // Usar el id de la tabla
+    
+    if (!table) {
+      console.error('Tabla no encontrada');
+      return;
+    }
+  
+    // Generar la captura de la tabla con html2canvas
+    html2canvas(table).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png'); // Convertir el canvas a imagen
+  
+      // Obtener las dimensiones del canvas
+      const imgWidth = canvas.width * 0.75; // Ajustar el tamaño de la imagen según el ancho
+      const imgHeight = canvas.height * 0.75; // Ajustar el tamaño de la imagen según el alto
+  
+      // Agregar la imagen al PDF con la posición y dimensiones correctas
+      doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight); // Agregar la imagen al PDF
+      doc.save('responsables.pdf'); // Guardar el PDF
+    }).catch(err => {
+      console.error('Error al generar el PDF:', err);
+    });
+  } 
 }
- 

@@ -2,48 +2,46 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Tarea } from '../models/tarea.model';
 
 @Pipe({
-  name: 'tareaFilter'
+  name: 'tareaOrder',
 })
-export class TareaFilterPipe implements PipeTransform {
+export class TareaOrderPipe implements PipeTransform {
+  transform(
+    tareas: Tarea[],
+    searchText: string = '',
+    searchPrioridad: string = '',
+    searchEstado: string = '',
+    searchResponsable: string = '',
+    searchProyecto: string = '',
+    orderBy: keyof Tarea = 'id',
+    orderDirection: 'asc' | 'desc' = 'asc'
+  ): Tarea[] {
+    if (!tareas || !orderBy) return tareas; 
 
-  transform(tareas: Tarea[], searchText: string, prioridad: string, responsable: string, estado: string, proyecto: string): Tarea[] {
-    if (!tareas) return [];
-    if (!searchText && !prioridad && !responsable && !estado && !proyecto) return tareas;
-
-    // Filtrar por nombre
-    let filteredTareas = tareas.filter(tarea => 
-      tarea.nombre.toLowerCase().includes(searchText.toLowerCase())
+    // Filtrar por nombre, prioridad, estado, responsable y proyecto
+    const filteredTareas = tareas.filter(tarea =>
+      tarea.nombre.toLowerCase().includes(searchText.toLowerCase()) &&
+      tarea.prioridad.toLowerCase().includes(searchPrioridad.toLowerCase()) &&
+      tarea.estado.toLowerCase().includes(searchEstado.toLowerCase()) &&
+      tarea.responsable?.nombre.toLowerCase().includes(searchResponsable.toLowerCase()) &&
+      tarea.proyecto?.nombre.toLowerCase().includes(searchProyecto.toLowerCase())
     );
 
-    // Filtrar por prioridad
-    if (prioridad) {
-      filteredTareas = filteredTareas.filter(tarea => 
-        tarea.prioridad.toLowerCase().includes(prioridad.toLowerCase())
-      );
-    }
+    return filteredTareas.sort((a, b) => {
+      const valueA = a[orderBy]; 
+      const valueB = b[orderBy];
 
-    // Filtrar por responsable
-    if (responsable) {
-      filteredTareas = filteredTareas.filter(tarea => 
-        tarea.responsableNombre?.toLowerCase().includes(responsable.toLowerCase()) ?? false
-      );
-    }
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return orderDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
 
-    // Filtrar por estado
-    if (estado) {
-      filteredTareas = filteredTareas.filter(tarea => 
-        tarea.estado.toLowerCase().includes(estado.toLowerCase())
-      );
-    }
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return orderDirection === 'asc'
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
+      }
 
-    // Filtrar por proyecto
-    if (proyecto) {
-      filteredTareas = filteredTareas.filter(tarea => 
-        tarea.proyecto?.nombre.toLowerCase().includes(proyecto.toLowerCase()) ?? false
-      );
-    }
-
-    return filteredTareas;
+      return 0;
+    });
   }
 }
 

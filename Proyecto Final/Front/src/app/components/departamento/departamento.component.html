@@ -1,5 +1,5 @@
-<!-- Sección "Crear Departamento" -->
-<div class="container mt-5"> 
+<!-- Sección "Crear Departamento" --> 
+<div class="container mt-5">
   <div class="card crear p-4 shadow-sm bg-light">
     <h2 class="text-center mb-4">Crear Departamento</h2>
     <form [formGroup]="departamentoForm" (ngSubmit)="agregarDepartamento()">
@@ -38,33 +38,54 @@
   <div class="card registrados p-4 shadow-sm bg-light">
     <h2 class="text-center mb-4">Departamentos Registrados</h2>
 
-    <!-- Filtro dentro de la tabla -->
-    <div class="row mb-4 py-3" style="background-color: #eaf4fc; border-radius: 8px;">
-      <div class="col-12 d-flex justify-content-center flex-wrap">
-        <!-- Filtro por Nombre -->
-        <div class="px-2 mb-2" style="min-width: 180px;">
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="searchText"
-            placeholder="Buscar por nombre"
-          />
-        </div>
+    <!-- Filtro por Ordenar y Dirección -->
+    <div class="row mb-4 py-3 justify-content-start align-items-center" style="background-color: #eaf4fc; border-radius: 8px;">
+      <!-- Selección de ordenación -->
+      <div class="col-md-6 px-3">
+        <label for="ordenarPor">Ordenar por</label>
+        <select class="form-control" id="ordenarPor" [(ngModel)]="orderBy" (change)="cambiarOrden(orderBy)">
+          <option value="id">ID</option>
+          <option value="nombre">Nombre</option>
+        </select>
+      </div>
+
+      <!-- Dirección de orden -->
+      <div class="col-md-6 px-3">
+        <label for="direccionOrden">Dirección</label>
+        <select class="form-control" id="direccionOrden" [(ngModel)]="orderDirection">
+          <option value="asc">Ascendente</option>
+          <option value="desc">Descendente</option>
+        </select>
       </div>
     </div>
 
-   <!-- Tabla de Departamentos -->
-<table class="table table-striped table-bordered">
+    <!-- Filtro por Nombre (centrado en una fila abajo) -->
+    <div class="row mb-4 py-3 justify-content-center" style="background-color: #eaf4fc; border-radius: 8px;">
+      <div class="col-md-6 px-3">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchText"
+          (input)="buscarDepartamentosPorNombre(searchText)"
+          placeholder="Buscar por nombre"
+        />
+      </div>
+    </div>
+    <!-- Tabla de Departamentos -->
+<table class="table table-striped table-bordered" id="tablaDepartamentos">
   <thead class="thead-dark">
     <tr>
       <th>ID</th>
-      <th>Nombre Departamento</th>
+      <th>Nombre Departamento
+        <button (click)="cambiarOrden('nombre')" class="btn btn-link">
+          <i class="fas" [ngClass]="orderDirection === 'asc' ? 'fa-sort-amount-down' : 'fa-sort-amount-up'"></i>
+        </button>
+      </th>
       <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
-    <tr
-      *ngFor="let departamento of departamentos | departamentoFilter:searchText | paginate: { itemsPerPage: pageSize, currentPage: page }">
+    <tr *ngFor="let departamento of departamentos | departamentoOrder: orderBy : orderDirection | paginate: { itemsPerPage: pageSize, currentPage: page }">
       <td>{{ departamento.id }}</td>
       <td>{{ departamento.nombre }}</td>
       <td>
@@ -79,11 +100,19 @@
   </tbody>
 </table>
 
-<!-- Componente de Paginación -->
-<pagination-controls
-  (pageChange)="page = $event"
-  [responsive]="true"
-  previousLabel="Anterior"
-  nextLabel="Siguiente"
-  class="d-flex justify-content-center mt-4">
-</pagination-controls>
+    <!-- Componente de Paginación -->
+    <pagination-controls
+      (pageChange)="page = $event"
+      [responsive]="true"
+      previousLabel="Anterior"
+      nextLabel="Siguiente"
+      class="d-flex justify-content-center mt-4">
+    </pagination-controls>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-info" (click)="exportarPDF()">
+        Exportar a PDF
+      </button>
+    </div>
+  </div>
+</div>

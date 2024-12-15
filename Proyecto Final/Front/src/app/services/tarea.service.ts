@@ -42,4 +42,39 @@ export class TareaService {
   getProyectos(): Observable<Proyecto[]> {
     return this.http.get<any[]>('http://localhost:8080/api/proyectos');
   }
+
+  //Filtro para nombre
+  getTareasByNombre(nombre: string): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(`${this.apiUrl}/filterByNombre`, {
+      params: { nombre },
+    });
+  }
+
+  //Filtro para prioridad
+  getTareasByPrioridad(prioridad: string): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(`${this.apiUrl}/filterByPrioridad`, {
+      params: { prioridad },
+    });
+  }
+
+  //Filtro para estado
+  getTareasByEstado(estado: string): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(`${this.apiUrl}/filterByEstado`, {
+      params: { estado },
+    });
+  }
+
+  //Filtro para responsable
+  getTareasByResponsable(responsable: string): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(`${this.apiUrl}/filterByResponsable`, {
+      params: { responsable },
+    });
+  }
+
+  //Filtro para proyecto
+  getTareasByProyecto(proyecto: string): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(`${this.apiUrl}/filterByProyecto`, {
+      params: { proyecto },
+    });
+  }
 }

@@ -31,4 +31,17 @@ export class ProyectoService {
   updateProyecto(proyecto: Proyecto): Observable<Proyecto> {
     return this.http.put<Proyecto>(`${this.apiUrl}/${proyecto.id}`, proyecto, { headers: this.httpHeaders });
   }
+
+  //Filtro para nombre
+  getProyectosByNombre(nombre: string): Observable<Proyecto[]> {
+    return this.http.get<Proyecto[]>(`${this.apiUrl}/filterByNombre`, {
+      params: { nombre },
+    });
+  }
+  //Filtro para descripcion 
+  getProyectosByDescripcion(descripcion: string): Observable<Proyecto[]> {
+    return this.http.get<Proyecto[]>(`${this.apiUrl}/filterByDescripcion`, {
+      params: { descripcion },
+    });
+  }
 }

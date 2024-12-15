@@ -31,5 +31,12 @@ export class PuestoService {
   updatePuesto(puesto: Puesto): Observable<Puesto> {
     return this.http.put<Puesto>(`${this.apiUrl}/${puesto.id}`, puesto, { headers: this.httpHeaders });
   }
+
+  //Filtro
+    getPuestosByNombre(nombre: string): Observable<Puesto[]> {
+      return this.http.get<Puesto[]>(`${this.apiUrl}/filterByNombre`, {
+        params: { nombre },
+      });
+    }
 }
 
